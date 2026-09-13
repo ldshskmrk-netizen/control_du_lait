@@ -1,0 +1,2401 @@
+<!DOCTYPE html>
+<html lang="fr" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title data-i18n="page_title">Contrôle du Lait — INSFP Bousaâda</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --milk-white: #F8F5F0;
+    --milk-cream: #EDE8E0;
+    --blue-deep: #1A3A5C;
+    --blue-mid:  #2B6CB0;
+    --blue-light:#EBF4FF;
+    --teal:      #1A7A6E;
+    --teal-light:#E0F5F2;
+    --amber:     #C47C00;
+    --amber-light:#FFF3D6;
+    --red:       #C0392B;
+    --red-light: #FDECEA;
+    --green:     #1F7A45;
+    --green-light:#E5F5EC;
+    --purple:    #5B3A8C;
+    --purple-light:#F0EAF9;
+    --text:      #1A1A2E;
+    --text-muted:#5A6070;
+    --border:    #D8D3CB;
+    --surface:   #FFFFFF;
+    --heading:   #1A3A5C;
+    --radius:    14px;
+    --shadow:    0 4px 24px rgba(26,58,92,0.10);
+  }
+
+  html[data-theme="dark"] {
+    --milk-white: #10141b;
+    --milk-cream: #1a212b;
+    --surface:    #1b222c;
+    --blue-mid:   #6FA8E0;
+    --blue-light: #16273b;
+    --teal:       #52C4B0;
+    --teal-light: #122b28;
+    --amber:      #E8AC4E;
+    --amber-light:#332711;
+    --red:        #E8887C;
+    --red-light:  #35201d;
+    --green:      #63C48C;
+    --green-light:#15311f;
+    --purple:     #B49AE0;
+    --purple-light:#251c38;
+    --text:       #E7E9EF;
+    --text-muted: #98A1B0;
+    --border:     #2B3340;
+    --heading:    #8FC1EF;
+    --shadow:     0 4px 24px rgba(0,0,0,0.35);
+  }
+
+  @media print { html[data-theme="dark"] {
+    --milk-white:#F8F5F0; --milk-cream:#EDE8E0; --surface:#FFF; --blue-mid:#2B6CB0; --blue-light:#EBF4FF;
+    --teal:#1A7A6E; --teal-light:#E0F5F2; --amber:#C47C00; --amber-light:#FFF3D6; --red:#C0392B; --red-light:#FDECEA;
+    --green:#1F7A45; --green-light:#E5F5EC; --purple:#5B3A8C; --purple-light:#F0EAF9; --text:#1A1A2E;
+    --text-muted:#5A6070; --border:#D8D3CB; --heading:#1A3A5C; --shadow:0 4px 24px rgba(26,58,92,0.10);
+  }}
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Cairo', sans-serif;
+    background: var(--milk-white);
+    color: var(--text);
+    min-height: 100vh;
+    transition: background 0.25s ease, color 0.25s ease;
+  }
+
+  img { max-width: 100%; display: block; }
+
+  /* ── ICON (inline svg) ── */
+  .icon { width: 1.15em; height: 1.15em; flex-shrink: 0; vertical-align: -0.2em; }
+  .icon-lg { width: 1.6rem; height: 1.6rem; }
+
+  /* ── NAV ── */
+  nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--blue-deep);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 1.25rem;
+    height: 60px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.18);
+    gap: 0.75rem;
+  }
+  .nav-brand {
+    color: #fff;
+    font-weight: 900;
+    font-size: 1.05rem;
+    letter-spacing: 0.02em;
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+    flex-shrink: 0;
+  }
+  .nav-brand .icon { width: 1.5rem; height: 1.5rem; color: #fff; }
+  .nav-tabs {
+    display: flex;
+    gap: 0.3rem;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .nav-tabs::-webkit-scrollbar { display: none; }
+  .nav-tab {
+    background: none;
+    border: none;
+    color: rgba(255,255,255,0.65);
+    font-family: 'Cairo', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 600;
+    padding: 0.35rem 0.85rem;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.22s;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+  .nav-tab:hover { color: #fff; background: rgba(255,255,255,0.12); }
+  .nav-tab.active { color: #fff; background: var(--blue-mid); }
+  .nav-tab .tick {
+    width: 15px; height: 15px; border-radius: 50%;
+    background: var(--green); display: grid; place-items: center; flex-shrink: 0;
+  }
+  .nav-tab .tick svg { width: 9px; height: 9px; }
+  .nav-tab .tick.hidden { display: none; }
+
+  .lang-toggle {
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.25);
+    border-radius: 20px;
+    display: flex;
+    padding: 3px;
+    flex-shrink: 0;
+  }
+  .lang-btn {
+    background: none;
+    border: none;
+    color: rgba(255,255,255,0.65);
+    font-family: 'Cairo', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 800;
+    padding: 0.3rem 0.65rem;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.2s;
+    letter-spacing: 0.03em;
+  }
+  .lang-btn.active { background: #fff; color: var(--blue-deep); }
+  .lang-btn:not(.active):hover { color: #fff; }
+
+  .theme-toggle-btn {
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.25);
+    color: #fff;
+    width: 34px; height: 34px;
+    border-radius: 50%;
+    cursor: pointer;
+    flex-shrink: 0;
+    display: grid;
+    place-items: center;
+    transition: background 0.2s;
+  }
+  .theme-toggle-btn:hover { background: rgba(255,255,255,0.22); }
+  .theme-toggle-btn .icon { width: 1.1rem; height: 1.1rem; }
+
+  /* ── HERO ── */
+  .hero {
+    position: relative;
+    color: #fff;
+    padding: 3.5rem 1.5rem 2.5rem;
+    text-align: center;
+    overflow: hidden;
+  }
+  .hero-bg {
+    position: absolute; inset: 0;
+    background-color: var(--blue-deep); background-size: cover; background-position: center;
+    z-index: 0;
+  }
+  .hero-bg::after {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(135deg, rgba(15,35,58,0.94) 0%, rgba(20,60,110,0.90) 55%, rgba(30,90,145,0.86) 100%);
+  }
+  .hero > * { position: relative; z-index: 1; }
+  .hero-label {
+    display: inline-block;
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.25);
+    border-radius: 20px;
+    padding: 0.25rem 1rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    letter-spacing: 0.05em;
+  }
+  .hero h1 {
+    font-size: 2.2rem;
+    font-weight: 900;
+    margin-bottom: 0.6rem;
+  }
+  .hero p.tagline {
+    font-size: 1rem;
+    opacity: 0.85;
+    max-width: 560px;
+    margin: 0 auto 1.5rem;
+  }
+  .hero-stats {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-bottom: 1.6rem;
+  }
+  .hero-stat {
+    background: rgba(255,255,255,0.13);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 12px;
+    padding: 0.6rem 1.2rem;
+    text-align: center;
+  }
+  .hero-stat strong { display: block; font-size: 1.4rem; font-weight: 900; }
+  .hero-stat small { font-size: 0.72rem; opacity: 0.8; }
+
+  .hero-progress-wrap {
+    max-width: 420px;
+    margin: 0 auto 1.4rem;
+  }
+  .hero-progress-label {
+    font-size: 0.78rem; opacity: 0.85; margin-bottom: 0.4rem;
+    display: flex; justify-content: space-between;
+  }
+  .hero-progress-bg {
+    height: 9px; background: rgba(255,255,255,0.2); border-radius: 20px; overflow: hidden;
+  }
+  .hero-progress-fill {
+    height: 100%; background: linear-gradient(90deg, #6FE3B4, #2ECC91);
+    border-radius: 20px; transition: width 0.5s ease; width: 0%;
+  }
+
+  .hero-actions { display: flex; justify-content: center; gap: 0.7rem; flex-wrap: wrap; }
+  .btn {
+    font-family: 'Cairo', sans-serif;
+    font-weight: 700;
+    font-size: 0.85rem;
+    border-radius: 10px;
+    padding: 0.65rem 1.3rem;
+    cursor: pointer;
+    border: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.2s;
+  }
+  .btn-light { background: #fff; color: var(--blue-deep); }
+  .btn-light:hover { transform: translateY(-1px); box-shadow: 0 6px 18px rgba(0,0,0,0.18); }
+  .btn-ghost { background: rgba(255,255,255,0.14); color: #fff; border: 1px solid rgba(255,255,255,0.3); }
+  .btn-ghost:hover { background: rgba(255,255,255,0.22); }
+  .btn-primary { background: var(--blue-deep); color: #fff; }
+  .btn-primary:hover { background: #142e49; transform: translateY(-1px); }
+  .btn-outline { background: transparent; color: var(--heading); border: 1.5px solid var(--heading); }
+  .btn-outline:hover { background: var(--blue-light); }
+  .btn:active { transform: translateY(0); }
+
+  /* ── SECTIONS ── */
+  .section {
+    display: none;
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 2rem 1.25rem 4rem;
+    animation: fadeIn 0.3s ease;
+  }
+  .section.active { display: block; }
+  @keyframes fadeIn { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:none; } }
+
+  /* ── LESSON HEADER ── */
+  .lesson-header {
+    display: flex;
+    align-items: center;
+    gap: 1.1rem;
+    margin-bottom: 1.8rem;
+    padding-bottom: 1.2rem;
+    border-bottom: 2px solid var(--border);
+  }
+  .lesson-icon {
+    width: 68px; height: 68px;
+    border-radius: 16px;
+    flex-shrink: 0;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.18);
+  }
+  .lesson-icon img { width: 100%; height: 100%; object-fit: cover; }
+  .lesson-header h2 { font-size: 1.35rem; font-weight: 900; line-height: 1.3; }
+  .lesson-header p { font-size: 0.85rem; color: var(--text-muted); margin-top: 0.2rem; }
+  .lesson-header-text { flex: 1; min-width: 0; }
+
+  .mark-done-row { display: flex; justify-content: flex-end; margin-top: 1.6rem; }
+  .mark-done-btn {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    background: var(--surface); border: 1.5px solid var(--border); border-radius: 10px;
+    padding: 0.6rem 1.1rem; font-family: 'Cairo',sans-serif; font-weight: 700; font-size: 0.85rem;
+    cursor: pointer; color: var(--text-muted); transition: all 0.2s;
+  }
+  .mark-done-btn:hover { border-color: var(--green); color: var(--green); }
+  .mark-done-btn.done { background: var(--green-light); border-color: var(--green); color: var(--green); }
+  .mark-done-btn .icon { width: 1.05rem; height: 1.05rem; }
+
+  /* ── CARDS GRID ── */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; margin-bottom: 1.4rem; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1.2rem; margin-bottom: 1.4rem; }
+  @media(max-width:680px) { .grid-2,.grid-3 { grid-template-columns:1fr; } }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.3rem 1.4rem;
+    box-shadow: var(--shadow);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  .card:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(26,58,92,0.14); }
+  .card-title {
+    font-size: 0.78rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--heading);
+  }
+
+  /* ── TABLE ── */
+  .data-table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+  .data-table th {
+    background: var(--blue-deep);
+    color: #fff;
+    padding: 0.55rem 0.9rem;
+    text-align: start;
+    font-weight: 700;
+    font-size: 0.8rem;
+  }
+  .data-table th:first-child { border-start-start-radius: 8px; }
+  .data-table th:last-child  { border-start-end-radius: 8px; }
+  .data-table td { padding: 0.55rem 0.9rem; border-bottom: 1px solid var(--milk-cream); }
+  .data-table tr:last-child td { border-bottom: none; }
+  .data-table tr:nth-child(even) td { background: var(--milk-white); }
+  .data-table td:last-child { font-weight: 700; color: var(--blue-mid); }
+
+  /* ── PILLS ── */
+  .pill { display: inline-block; padding: 0.22rem 0.75rem; border-radius: 20px; font-size: 0.75rem; font-weight: 700; }
+  .pill-blue   { background:var(--blue-light);   color:var(--heading); }
+  .pill-teal   { background:var(--teal-light);   color:var(--teal); }
+  .pill-amber  { background:var(--amber-light);  color:var(--amber); }
+  .pill-red    { background:var(--red-light);    color:var(--red); }
+  .pill-green  { background:var(--green-light);  color:var(--green); }
+  .pill-purple { background:var(--purple-light); color:var(--purple); }
+
+  /* ── INFO ROW ── */
+  .info-row {
+    display: flex; align-items: flex-start; gap: 0.75rem;
+    padding: 0.65rem 0; border-bottom: 1px solid var(--milk-cream);
+    font-size: 0.88rem; line-height: 1.55;
+  }
+  .info-row:last-child { border-bottom: none; }
+  .info-dot { width: 8px; height: 8px; border-radius: 50%; margin-top: 6px; flex-shrink: 0; }
+  .info-row .icon { margin-top: 2px; color: var(--blue-mid); }
+
+  /* ── ALERT BOX ── */
+  .alert {
+    border-radius: 12px; padding: 1rem 1.2rem; margin-bottom: 1.2rem;
+    display: flex; gap: 0.8rem; font-size: 0.87rem; line-height: 1.6;
+  }
+  .alert .icon { flex-shrink: 0; margin-top: 1px; width: 1.3rem; height: 1.3rem; }
+  .alert-red    { background:var(--red-light);    border-inline-start: 4px solid var(--red); }
+  .alert-amber  { background:var(--amber-light);  border-inline-start: 4px solid var(--amber); }
+  .alert-green  { background:var(--green-light);  border-inline-start: 4px solid var(--green); }
+  .alert-blue   { background:var(--blue-light);   border-inline-start: 4px solid var(--blue-mid); }
+  .alert-purple { background:var(--purple-light); border-inline-start: 4px solid var(--purple); }
+  .alert-red .icon { color: var(--red); } .alert-amber .icon { color: var(--amber); }
+  .alert-green .icon { color: var(--green); } .alert-blue .icon { color: var(--blue-mid); }
+  .alert-purple .icon { color: var(--purple); }
+
+  /* ── SECTION TITLE ── */
+  .section-title {
+    font-size: 1rem; font-weight: 700; color: var(--heading);
+    margin: 1.6rem 0 0.8rem; display: flex; align-items: center; gap: 0.5rem;
+  }
+  .section-title::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+  /* ── PROCESS FLOW ── */
+  .flow { display: flex; flex-direction: column; gap: 0; margin-bottom: 1.4rem; }
+  .flow-step { display: flex; align-items: stretch; gap: 0; cursor: pointer; }
+  .flow-left { display: flex; flex-direction: column; align-items: center; width: 48px; flex-shrink: 0; }
+  .flow-num {
+    width: 36px; height: 36px; border-radius: 50%; display: grid; place-items: center;
+    font-weight: 900; font-size: 0.85rem; color: #fff; flex-shrink: 0; z-index: 1;
+  }
+  .flow-line { width: 2px; flex: 1; min-height: 14px; background: var(--border); margin: 0 auto; }
+  .flow-body {
+    flex: 1; background: var(--surface); border: 1px solid var(--border); border-radius: 10px;
+    padding: 0.7rem 1rem; margin-bottom: 10px; transition: all 0.2s;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  }
+  .flow-step:hover .flow-body { border-color: var(--blue-mid); box-shadow: 0 4px 16px rgba(43,108,176,0.12); }
+  .flow-step-title { font-weight: 700; font-size: 0.9rem; }
+  .flow-step-detail { font-size: 0.82rem; color: var(--text-muted); margin-top: 0.25rem; display: none; line-height: 1.55; }
+  .flow-step.open .flow-step-detail { display: block; }
+  .flow-meta { display: flex; align-items: center; justify-content: space-between; }
+  .flow-toggle { font-size: 0.75rem; color: var(--blue-mid); font-weight: 600; display:flex; align-items:center; gap:0.25rem; }
+  .flow-toggle .icon { width: 0.9rem; height: 0.9rem; transition: transform 0.25s; }
+  .flow-step.open .flow-toggle .icon { transform: rotate(180deg); }
+
+  /* ── BACTERIA CARDS ── */
+  .bacteria-card {
+    background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+    overflow: hidden; margin-bottom: 1rem; box-shadow: var(--shadow);
+  }
+  .bacteria-header { padding: 0.9rem 1.2rem; display: flex; align-items: center; gap: 0.9rem; cursor: pointer; }
+  .bacteria-photo {
+    width: 46px; height: 46px; border-radius: 10px; overflow: hidden; flex-shrink: 0;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  }
+  .bacteria-photo img { width: 100%; height: 100%; object-fit: cover; }
+  .bacteria-name { font-weight: 900; font-size: 1rem; }
+  .bacteria-type { font-size: 0.78rem; font-weight: 600; margin-top: 0.15rem; }
+  .bacteria-chevron { margin-inline-start: auto; color: var(--text-muted); flex-shrink: 0; }
+  .bacteria-chevron .icon { width: 1.1rem; height: 1.1rem; transition: transform 0.25s; }
+  .bacteria-card.open .bacteria-chevron .icon { transform: rotate(180deg); }
+  .bacteria-body { padding: 0 1.2rem; max-height: 0; overflow: hidden; transition: max-height 0.35s ease, padding 0.2s; }
+  .bacteria-body.open { max-height: 500px; padding: 0.8rem 1.2rem 1.2rem; border-top: 1px solid var(--border); }
+  .bacteria-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem; margin-top: 0.4rem; }
+  .b-stat { background: var(--milk-white); border-radius: 8px; padding: 0.5rem 0.75rem; }
+  .b-stat-label { font-size: 0.72rem; color: var(--text-muted); font-weight: 600; }
+  .b-stat-val { font-size: 0.88rem; font-weight: 700; color: var(--heading); margin-top: 0.1rem; }
+
+  /* ── COMPOSITION CHART ── */
+  .comp-chart { margin-bottom: 1.4rem; }
+  .comp-bar-row { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.6rem; font-size: 0.85rem; }
+  .comp-label { width: 130px; flex-shrink: 0; font-weight: 600; text-align: end; }
+  .comp-bar-bg { flex: 1; background: var(--milk-cream); border-radius: 20px; height: 22px; overflow: hidden; }
+  .comp-bar-fill {
+    height: 100%; border-radius: 20px; display: flex; align-items: center;
+    padding-inline-end: 8px; font-size: 0.75rem; font-weight: 700; color: #fff;
+    transition: width 0.8s ease; min-width: 30px; justify-content: flex-end;
+  }
+  .comp-val { width: 50px; flex-shrink: 0; font-weight: 700; color: var(--heading); }
+
+  /* ── SUB TABS ── */
+  .sub-tabs { display: flex; gap: 0.4rem; margin-bottom: 1.2rem; flex-wrap: wrap; }
+  .sub-tab {
+    background: var(--milk-cream); border: 1px solid var(--border); border-radius: 20px;
+    padding: 0.3rem 0.9rem; font-family: 'Cairo', sans-serif; font-size: 0.8rem; font-weight: 600;
+    cursor: pointer; color: var(--text-muted); transition: all 0.2s;
+  }
+  .sub-tab.active, .sub-tab:hover { background: var(--blue-deep); border-color: var(--blue-deep); color: #fff; }
+  .sub-panel { display: none; }
+  .sub-panel.active { display: block; animation: fadeIn 0.25s ease; }
+
+  /* ── QUIZ INTRO ── */
+  .quiz-intro-card {
+    background: var(--surface); border-radius: 20px; overflow: hidden; box-shadow: var(--shadow);
+    border: 1px solid var(--border);
+  }
+  .quiz-intro-photo { height: 200px; position: relative; }
+  .quiz-intro-photo img { width: 100%; height: 100%; object-fit: cover; }
+  .quiz-intro-photo::after {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(180deg, rgba(26,58,92,0) 40%, rgba(26,58,92,0.85) 100%);
+  }
+  .quiz-intro-body { padding: 1.6rem 1.8rem 2rem; text-align: center; }
+  .quiz-intro-body h2 { font-size: 1.4rem; font-weight: 900; margin-bottom: 0.5rem; color: var(--heading); }
+  .quiz-intro-body p { color: var(--text-muted); font-size: 0.92rem; margin-bottom: 1.3rem; }
+  .quiz-best-score {
+    display: inline-flex; align-items: center; gap: 0.5rem; background: var(--green-light);
+    color: var(--green); border-radius: 20px; padding: 0.4rem 1rem; font-size: 0.82rem; font-weight: 700;
+    margin-bottom: 1.3rem;
+  }
+  .quiz-meta-row { display: flex; justify-content: center; gap: 1.6rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
+  .quiz-meta-item { text-align: center; }
+  .quiz-meta-item strong { display: block; font-size: 1.2rem; color: var(--heading); font-weight: 900; }
+  .quiz-meta-item span { font-size: 0.72rem; color: var(--text-muted); }
+
+  /* ── EXAM MODE (distraction-free) ── */
+  body.exam-mode nav, body.exam-mode .hero, body.exam-mode footer { display: none !important; }
+  body.exam-mode .section:not(#quiz) { display: none !important; }
+  body.exam-mode #quiz {
+    display: block !important;
+    position: fixed; inset: 0; z-index: 500;
+    background: var(--milk-white);
+    overflow-y: auto;
+    max-width: none; margin: 0; padding: 0;
+  }
+  #quiz .exam-bar {
+    display: none;
+    position: sticky; top: 0; z-index: 5;
+    background: var(--blue-deep); color: #fff;
+    align-items: center; gap: 1rem;
+    padding: 0.8rem 1.2rem;
+  }
+  body.exam-mode #quiz .exam-bar { display: flex; }
+  body.exam-mode #quiz .quiz-intro-wrap, body.exam-mode #quiz .quiz-lesson-header { display: none; }
+  #quiz .quiz-intro-wrap, #quiz .quiz-body-wrap { max-width: 640px; margin: 0 auto; padding: 0 1.25rem 3rem; }
+  body.exam-mode #quiz .quiz-body-wrap { padding-top: 2rem; }
+  .exam-exit-btn {
+    background: rgba(255,255,255,0.14); border: 1px solid rgba(255,255,255,0.3); color: #fff;
+    width: 34px; height: 34px; border-radius: 50%; cursor: pointer; flex-shrink: 0;
+    display: grid; place-items: center;
+  }
+  .exam-exit-btn:hover { background: rgba(255,255,255,0.26); }
+  .exam-progress-wrap { flex: 1; }
+  .exam-progress-label { font-size: 0.75rem; opacity: 0.85; margin-bottom: 0.3rem; display: flex; justify-content: space-between; }
+  .exam-progress-bg { height: 6px; background: rgba(255,255,255,0.22); border-radius: 20px; overflow: hidden; }
+  .exam-progress-fill { height: 100%; background: #fff; border-radius: 20px; transition: width 0.3s ease; }
+  .exam-timer { font-size: 0.82rem; font-weight: 700; font-variant-numeric: tabular-nums; flex-shrink: 0; display:flex; align-items:center; gap:0.3rem; }
+
+  /* ── QUIZ QUESTION ── */
+  .quiz-box { background: var(--blue-deep); border-radius: var(--radius); padding: 1.5rem 1.6rem; color: #fff; margin-bottom: 1.2rem; margin-top: 1.6rem; }
+  .quiz-q-count { font-size: 0.78rem; opacity: 0.65; margin-bottom: 0.5rem; }
+  .quiz-q { font-size: 1.02rem; font-weight: 700; margin-bottom: 1.1rem; line-height: 1.5; }
+  .quiz-options { display: flex; flex-direction: column; gap: 0.55rem; }
+  .quiz-opt {
+    background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.18); border-radius: 10px;
+    padding: 0.7rem 1rem; cursor: pointer; font-family: 'Cairo', sans-serif; font-size: 0.88rem;
+    color: #fff; text-align: start; transition: all 0.2s; width: 100%; display: flex; align-items: center; gap: 0.65rem;
+  }
+  .quiz-opt:hover { background: rgba(255,255,255,0.18); }
+  .quiz-opt-key {
+    width: 22px; height: 22px; border-radius: 6px; background: rgba(255,255,255,0.15);
+    display: grid; place-items: center; font-size: 0.72rem; font-weight: 800; flex-shrink: 0;
+  }
+  .quiz-opt.correct { background: #1F7A45; border-color: #27ae60; }
+  .quiz-opt.wrong   { background: #C0392B; border-color: #e74c3c; }
+  .quiz-opt:disabled { cursor: default; }
+  .quiz-feedback { margin-top: 1rem; font-size: 0.85rem; opacity: 0; transition: opacity 0.3s; display: flex; gap: 0.5rem; align-items: flex-start; }
+  .quiz-feedback.show { opacity: 1; }
+  .quiz-feedback .icon { flex-shrink: 0; margin-top: 1px; }
+  .quiz-next-hint { margin-top: 0.7rem; font-size: 0.72rem; opacity: 0.6; }
+
+  /* ── RESULTS ── */
+  .results-wrap { text-align: center; padding-top: 1rem; }
+  .results-badge { width: 84px; height: 84px; border-radius: 50%; margin: 0 auto 1.1rem; display: grid; place-items: center; }
+  .results-badge.pass { background: var(--green-light); color: var(--green); }
+  .results-badge.mid { background: var(--amber-light); color: var(--amber); }
+  .results-badge.low { background: var(--red-light); color: var(--red); }
+  .results-badge .icon { width: 2.6rem; height: 2.6rem; }
+  .quiz-score { font-size: 1.7rem; font-weight: 900; margin-bottom: 0.4rem; }
+  .results-msg { color: var(--text-muted); font-size: 0.92rem; margin-bottom: 0.4rem; }
+  .results-time { color: var(--text-muted); font-size: 0.8rem; margin-bottom: 1.6rem; }
+  .results-actions { display: flex; justify-content: center; gap: 0.7rem; margin-bottom: 2rem; flex-wrap: wrap; }
+  .review-list { text-align: start; }
+  .review-item { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 1rem 1.2rem; margin-bottom: 0.8rem; }
+  .review-item-q { font-weight: 700; font-size: 0.9rem; margin-bottom: 0.6rem; display: flex; gap: 0.6rem; }
+  .review-item-q .icon { flex-shrink: 0; margin-top: 2px; }
+  .review-item-q.correct .icon { color: var(--green); }
+  .review-item-q.wrong .icon { color: var(--red); }
+  .review-answer { font-size: 0.84rem; padding: 0.4rem 0.7rem; border-radius: 8px; margin-bottom: 0.3rem; }
+  .review-answer.your-wrong { background: var(--red-light); color: var(--red); }
+  .review-answer.correct-ans { background: var(--green-light); color: var(--green); }
+  .review-exp { font-size: 0.82rem; color: var(--text-muted); margin-top: 0.5rem; line-height: 1.5; }
+
+  /* ── MODAL ── */
+  .modal-overlay {
+    position: fixed; inset: 0; background: rgba(20,30,45,0.55); z-index: 900;
+    display: none; align-items: center; justify-content: center; padding: 1.5rem;
+  }
+  .modal-overlay.open { display: flex; }
+  .modal-card {
+    background: var(--surface); border-radius: 16px; padding: 1.8rem; max-width: 360px; width: 100%;
+    text-align: center; box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+  }
+  .modal-card h3 { font-size: 1.05rem; font-weight: 900; margin-bottom: 0.6rem; color: var(--heading); }
+  .modal-card p { font-size: 0.88rem; color: var(--text-muted); margin-bottom: 1.4rem; line-height: 1.5; }
+  .modal-actions { display: flex; gap: 0.7rem; }
+  .modal-actions .btn { flex: 1; justify-content: center; }
+
+  /* ── FOOTER ── */
+  footer { text-align: center; padding: 1.5rem; font-size: 0.78rem; color: var(--text-muted); border-top: 1px solid var(--border); margin-top: 2rem; }
+
+  @media print {
+    nav, .hero-actions, .lang-toggle, .mark-done-row, #quiz, footer, .btn { display: none !important; }
+    .hero { background: none !important; color: var(--text) !important; padding: 1rem 0; }
+    .hero-bg, .hero-bg::after { display: none; }
+    .hero h1 { color: var(--blue-deep); }
+    .hero-label, .hero-stat { color: var(--text); border-color: var(--border); background: none; }
+    .section { display: block !important; max-width: 100%; page-break-after: always; }
+    .card, .bacteria-card, .flow-body { box-shadow: none; break-inside: avoid; }
+    .bacteria-body { max-height: none !important; padding: 0.8rem 1.2rem 1.2rem !important; }
+    .flow-step-detail { display: block !important; }
+    .sub-panel { display: block !important; }
+  }
+
+  /* ── PREMIUM LEARNING LAYER ── */
+  :focus-visible { outline: 3px solid var(--amber); outline-offset: 3px; }
+  .section.section-dashboard { max-width: 1120px; }
+  .dashboard-top { display:flex; justify-content:space-between; align-items:flex-end; gap:1rem; margin-bottom:1.25rem; }
+  .eyebrow { color:var(--teal); text-transform:uppercase; letter-spacing:.12em; font-size:.7rem; font-weight:900; }
+  .dashboard-title { font-size:clamp(1.7rem,3vw,2.35rem); color:var(--heading); font-weight:900; line-height:1.15; margin-top:.25rem; }
+  .dashboard-subtitle { color:var(--text-muted); margin-top:.35rem; font-size:.9rem; }
+  .dashboard-actions { display:flex; gap:.55rem; flex-wrap:wrap; justify-content:flex-end; }
+  .dashboard-grid { display:grid; grid-template-columns:1.35fr .65fr; gap:1.2rem; margin-bottom:1.2rem; }
+  .dashboard-card { background:var(--surface); border:1px solid var(--border); border-radius:18px; padding:1.2rem; box-shadow:var(--shadow); }
+  .dashboard-card h3 { font-size:1rem; color:var(--heading); margin-bottom:.85rem; }
+  .continue-card { position:relative; overflow:hidden; background:linear-gradient(135deg,var(--blue-deep),#245d8d); color:#fff; border:none; }
+  .continue-card::after { content:'◌'; position:absolute; right:-.1rem; bottom:-2.5rem; font-size:11rem; opacity:.08; line-height:1; }
+  html[dir="rtl"] .continue-card::after { right:auto; left:-.1rem; }
+  .continue-card h3,.continue-card .eyebrow { color:#fff; }
+  .continue-card .eyebrow { opacity:.72; }
+  .continue-meta { display:flex; align-items:center; gap:.75rem; margin:1rem 0; position:relative; z-index:1; }
+  .continue-icon { width:42px; height:42px; border-radius:12px; display:grid; place-items:center; background:rgba(255,255,255,.16); font-weight:900; }
+  .continue-name { font-weight:800; }
+  .continue-detail { font-size:.78rem; opacity:.75; }
+  .continue-card .btn-light { position:relative; z-index:1; }
+  .metric-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:.7rem; }
+  .metric { padding:.85rem .7rem; background:var(--milk-white); border-radius:12px; border:1px solid var(--border); }
+  .metric-value { color:var(--heading); font-size:1.25rem; line-height:1; font-weight:900; }
+  .metric-label { color:var(--text-muted); display:block; font-size:.68rem; line-height:1.35; margin-top:.35rem; }
+  .ring-row { display:flex; align-items:center; gap:1rem; }
+  .progress-ring { --progress:0; width:92px; height:92px; border-radius:50%; display:grid; place-items:center; flex-shrink:0; background:conic-gradient(var(--teal) calc(var(--progress) * 1%), var(--milk-cream) 0); position:relative; }
+  .progress-ring::before { content:''; position:absolute; inset:8px; border-radius:50%; background:var(--surface); }
+  .progress-ring strong { position:relative; z-index:1; color:var(--heading); font-size:1.1rem; }
+  .ring-copy strong { display:block; color:var(--heading); font-size:.95rem; }
+  .ring-copy span { display:block; color:var(--text-muted); font-size:.78rem; margin-top:.25rem; }
+  .journey { display:flex; align-items:stretch; gap:.35rem; overflow-x:auto; padding:.2rem .1rem .5rem; scrollbar-width:thin; }
+  .journey-step { min-width:118px; border:1px solid var(--border); border-radius:14px; padding:.85rem .7rem; background:var(--milk-white); position:relative; }
+  .journey-step:not(:last-child)::after { content:'→'; position:absolute; right:-.62rem; top:1.3rem; color:var(--text-muted); font-weight:900; z-index:1; }
+  html[dir="rtl"] .journey-step:not(:last-child)::after { content:'←'; right:auto; left:-.62rem; }
+  .journey-step.active { border-color:var(--teal); box-shadow:0 0 0 2px color-mix(in srgb,var(--teal) 18%,transparent); }
+  .journey-step.done { background:var(--green-light); border-color:var(--green); }
+  .journey-num { width:26px; height:26px; border-radius:50%; background:var(--blue-light); color:var(--heading); display:grid; place-items:center; font-size:.72rem; font-weight:900; margin-bottom:.5rem; }
+  .journey-step.done .journey-num { background:var(--green); color:#fff; }
+  .journey-name { font-size:.76rem; font-weight:800; color:var(--heading); }
+  .journey-status { color:var(--text-muted); font-size:.65rem; margin-top:.2rem; }
+  .dashboard-two { display:grid; grid-template-columns:1fr 1fr; gap:1.2rem; }
+  .smart-review { border-inline-start:4px solid var(--amber); }
+  .smart-review .weakness { display:flex; justify-content:space-between; align-items:center; gap:.8rem; padding:.65rem 0; }
+  .topic-bar { height:7px; background:var(--milk-cream); border-radius:99px; overflow:hidden; margin-top:.35rem; }
+  .topic-bar span { display:block; height:100%; background:var(--amber); border-radius:inherit; }
+  .search-shell { display:flex; gap:.65rem; align-items:center; margin-bottom:1.25rem; }
+  .search-input { flex:1; min-width:0; padding:.75rem 1rem; border:1px solid var(--border); border-radius:12px; background:var(--surface); color:var(--text); font:inherit; }
+  .search-results { display:grid; gap:.55rem; margin-top:.7rem; }
+  .search-result { text-align:start; background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:.75rem 1rem; cursor:pointer; color:var(--text); }
+  .search-result:hover { border-color:var(--blue-mid); background:var(--blue-light); }
+  .search-result strong { display:block; color:var(--heading); font-size:.86rem; }
+  .search-result span { display:block; color:var(--text-muted); font-size:.75rem; margin-top:.15rem; }
+  .revision-layout { display:grid; grid-template-columns:minmax(0,1fr) 280px; gap:1.2rem; }
+  .flashcard-scene { perspective:1200px; min-height:290px; cursor:pointer; }
+  .flashcard { min-height:290px; position:relative; transform-style:preserve-3d; transition:transform .55s cubic-bezier(.2,.7,.2,1); }
+  .flashcard.flipped { transform:rotateY(180deg); }
+  .flash-face { position:absolute; inset:0; backface-visibility:hidden; border-radius:20px; padding:2rem; display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center; box-shadow:var(--shadow); border:1px solid var(--border); }
+  .flash-front { color:#fff; background:linear-gradient(145deg,var(--blue-deep),#26719a); }
+  .flash-back { color:var(--text); background:var(--surface); transform:rotateY(180deg); }
+  .flash-kicker { font-size:.7rem; text-transform:uppercase; letter-spacing:.12em; opacity:.7; margin-bottom:1rem; }
+  .flash-question { font-size:clamp(1.1rem,2vw,1.5rem); font-weight:900; line-height:1.35; }
+  .flash-answer { font-size:1.05rem; color:var(--heading); font-weight:800; line-height:1.5; }
+  .flash-controls { display:flex; justify-content:center; gap:.6rem; flex-wrap:wrap; margin-top:1rem; }
+  .flash-list { display:flex; flex-direction:column; gap:.45rem; max-height:330px; overflow:auto; }
+  .flash-list button { text-align:start; border:1px solid var(--border); background:var(--surface); color:var(--text); padding:.6rem .7rem; border-radius:10px; font:inherit; font-size:.75rem; cursor:pointer; }
+  .flash-list button.active { border-color:var(--teal); background:var(--teal-light); }
+  .practice-card { border-top:4px solid var(--purple); }
+  .practice-options { display:grid; grid-template-columns:1fr 1fr; gap:.65rem; margin-top:1rem; }
+  .practice-option { text-align:start; background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:.75rem; font:inherit; cursor:pointer; color:var(--text); }
+  .practice-option:hover { border-color:var(--blue-mid); }
+  .practice-option.correct { background:var(--green-light); border-color:var(--green); color:var(--green); }
+  .practice-option.wrong { background:var(--red-light); border-color:var(--red); color:var(--red); }
+  .case-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:.65rem; margin:1rem 0; }
+  .case-value { background:var(--milk-white); border:1px solid var(--border); border-radius:12px; padding:.7rem; text-align:center; }
+  .case-value strong { display:block; color:var(--heading); font-size:1rem; }
+  .case-value span { color:var(--text-muted); font-size:.68rem; }
+  .difficulty-row { display:flex; gap:.5rem; flex-wrap:wrap; margin:.65rem 0 1rem; }
+  .difficulty { border:1px solid var(--border); border-radius:999px; background:var(--surface); color:var(--text-muted); padding:.4rem .7rem; font:inherit; font-size:.75rem; cursor:pointer; }
+  .difficulty.active { border-color:var(--heading); color:var(--heading); box-shadow:0 0 0 2px var(--blue-light); }
+  .timer-card { display:flex; align-items:center; justify-content:space-between; gap:1rem; flex-wrap:wrap; }
+  .timer-display { font-size:2rem; font-weight:900; color:var(--heading); font-variant-numeric:tabular-nums; }
+  .timer-presets { display:flex; gap:.4rem; flex-wrap:wrap; }
+  .timer-preset { border:1px solid var(--border); background:var(--surface); color:var(--text); border-radius:9px; padding:.4rem .65rem; cursor:pointer; font:inherit; font-size:.75rem; }
+  .teacher-grid { display:grid; grid-template-columns:1fr 1fr 1fr; gap:.7rem; }
+  .teacher-grid label { color:var(--text-muted); font-size:.75rem; }
+  .teacher-grid input { display:block; width:100%; margin-top:.3rem; padding:.65rem .7rem; border:1px solid var(--border); border-radius:9px; background:var(--surface); color:var(--text); font:inherit; }
+  .toast-region { position:fixed; z-index:1200; right:1rem; bottom:1rem; display:grid; gap:.5rem; width:min(330px,calc(100vw - 2rem)); }
+  html[dir="rtl"] .toast-region { right:auto; left:1rem; }
+  .toast { display:flex; gap:.6rem; align-items:flex-start; background:var(--blue-deep); color:#fff; padding:.75rem .85rem; border-radius:12px; box-shadow:0 12px 30px rgba(0,0,0,.22); font-size:.78rem; animation:toastIn .25s ease both; }
+  .toast.success { border-inline-start:4px solid var(--green); } .toast.warning { border-inline-start:4px solid var(--amber); }
+  @keyframes toastIn { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:none; } }
+  .bottom-nav { display:none; }
+  .exam-summary { display:grid; grid-template-columns:repeat(4,1fr); gap:.6rem; margin:1rem 0 1.2rem; }
+  .exam-summary .metric { text-align:center; }
+  .exam-summary .metric-value { font-size:1.05rem; }
+  .official-tag { display:inline-flex; align-items:center; gap:.35rem; border-radius:99px; padding:.3rem .65rem; background:var(--teal-light); color:var(--teal); font-size:.7rem; font-weight:800; }
+  .exam-question-shell { background:var(--surface); border:1px solid var(--border); border-radius:18px; overflow:hidden; box-shadow:var(--shadow); }
+  .exam-question-head { padding:1.25rem 1.35rem; border-bottom:1px solid var(--border); display:flex; justify-content:space-between; gap:1rem; align-items:flex-start; }
+  .exam-question-head h3 { color:var(--heading); font-size:1.15rem; line-height:1.45; }
+  .exam-points { white-space:nowrap; color:var(--teal); font-weight:900; font-size:.85rem; }
+  .exam-instruction { color:var(--text-muted); font-size:.8rem; margin-top:.35rem; }
+  .exam-interaction { padding:1.25rem 1.35rem; }
+  .exam-choice-grid { display:grid; grid-template-columns:1fr 1fr; gap:.7rem; }
+  .exam-choice { display:flex; align-items:flex-start; gap:.7rem; text-align:start; border:1px solid var(--border); border-radius:12px; background:var(--surface); color:var(--text); padding:.85rem; cursor:pointer; font:inherit; min-height:64px; }
+  .exam-choice:hover { border-color:var(--blue-mid); transform:translateY(-1px); }
+  .exam-choice.selected { border-color:var(--blue-mid); background:var(--blue-light); box-shadow:0 0 0 2px color-mix(in srgb,var(--blue-mid) 15%,transparent); }
+  .exam-choice.locked { cursor:default; }
+  .exam-choice.correct { background:var(--green-light); border-color:var(--green); }
+  .exam-choice.incorrect { background:var(--red-light); border-color:var(--red); }
+  .choice-mark { width:24px; height:24px; flex-shrink:0; border:2px solid currentColor; border-radius:7px; display:grid; place-items:center; font-size:.7rem; font-weight:900; color:var(--text-muted); }
+  .exam-choice.selected .choice-mark { color:var(--blue-mid); background:var(--blue-mid); color:#fff; }
+  .exam-choice.correct .choice-mark { background:var(--green); color:#fff; border-color:var(--green); }
+  .exam-choice.incorrect .choice-mark { background:var(--red); color:#fff; border-color:var(--red); }
+  .exam-action-row { display:flex; align-items:center; justify-content:space-between; gap:.7rem; flex-wrap:wrap; margin-top:1.2rem; }
+  .exam-feedback { margin-top:1rem; padding:.85rem 1rem; border-radius:12px; font-size:.82rem; line-height:1.55; }
+  .exam-feedback.good { background:var(--green-light); color:var(--green); }
+  .exam-feedback.partial { background:var(--amber-light); color:var(--amber); }
+  .exam-feedback.bad { background:var(--red-light); color:var(--red); }
+  .earned-points { font-weight:900; margin-top:.25rem; }
+  .build-selected { display:flex; gap:.4rem; flex-wrap:wrap; min-height:36px; margin-bottom:.8rem; }
+  .build-chip { background:var(--blue-light); color:var(--heading); border-radius:99px; padding:.3rem .6rem; font-size:.72rem; }
+  .match-layout { display:grid; grid-template-columns:1fr 1.4fr; gap:1rem; }
+  .match-column { display:grid; gap:.55rem; align-content:start; }
+  .match-item { width:100%; border:1px solid var(--border); border-radius:11px; padding:.7rem .8rem; background:var(--surface); color:var(--text); text-align:start; font:inherit; cursor:pointer; font-size:.78rem; }
+  .match-item.selected { border-color:var(--blue-mid); background:var(--blue-light); }
+  .match-item.matched { border-color:var(--teal); background:var(--teal-light); }
+  .match-item.correct { border-color:var(--green); background:var(--green-light); }
+  .match-item.incorrect { border-color:var(--red); background:var(--red-light); }
+  .match-number { display:inline-grid; place-items:center; width:22px; height:22px; border-radius:50%; background:var(--milk-cream); color:var(--heading); font-weight:900; margin-inline-end:.4rem; font-size:.7rem; }
+  .lab-workbench { background:linear-gradient(180deg,var(--blue-light),var(--surface)); border:1px solid var(--border); border-radius:16px; padding:1rem; }
+  .lab-visual { display:grid; grid-template-columns:1fr 1fr 1fr; gap:.7rem; align-items:end; margin-bottom:1rem; }
+  .lab-object { min-height:96px; border:1px solid var(--border); background:var(--surface); border-radius:12px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:.3rem; color:var(--heading); font-size:.76rem; text-align:center; }
+  .lab-object .lab-icon { font-size:2rem; line-height:1; }
+  .lab-steps { display:grid; grid-template-columns:1fr 1fr; gap:.55rem; }
+  .lab-step { border:1px dashed var(--blue-mid); background:var(--surface); color:var(--text); border-radius:10px; padding:.65rem .75rem; text-align:start; font:inherit; font-size:.76rem; cursor:pointer; }
+  .lab-step:hover { background:var(--blue-light); }
+  .lab-order { display:flex; flex-wrap:wrap; gap:.4rem; min-height:44px; padding:.55rem; border-radius:10px; background:rgba(255,255,255,.45); border:1px solid var(--border); margin:.7rem 0; }
+  .lab-order .build-chip { background:var(--teal-light); }
+  .equation { display:flex; flex-wrap:wrap; gap:.35rem; align-items:center; margin-top:1rem; }
+  .equation-token { border:1px solid var(--border); border-radius:8px; padding:.4rem .55rem; background:var(--surface); cursor:pointer; color:var(--heading); font-weight:800; font-size:.8rem; }
+  .equation-token.selected { background:var(--purple-light); border-color:var(--purple); }
+  .equation-slots { margin-top:.6rem; color:var(--text-muted); font-size:.78rem; min-height:1.5rem; }
+  .dornic-row { display:flex; gap:.6rem; align-items:center; flex-wrap:wrap; margin-top:1rem; padding-top:1rem; border-top:1px solid var(--border); }
+  .dornic-select { padding:.55rem .7rem; border:1px solid var(--border); border-radius:9px; background:var(--surface); color:var(--text); font:inherit; }
+  .results-dashboard { display:grid; grid-template-columns:1fr 1.5fr; gap:1rem; text-align:start; }
+  .result-hero { text-align:center; padding:1.5rem 1rem; background:linear-gradient(145deg,var(--blue-deep),#245d8d); color:#fff; border-radius:18px; }
+  .result-hero h2 { font-size:.82rem; letter-spacing:.12em; text-transform:uppercase; opacity:.75; }
+  .result-score { font-size:3rem; font-weight:900; line-height:1; margin:.7rem 0 .35rem; }
+  .result-percent { opacity:.8; }
+  .result-pass { display:inline-flex; margin-top:1rem; background:rgba(255,255,255,.15); border:1px solid rgba(255,255,255,.25); padding:.45rem .75rem; border-radius:99px; font-size:.78rem; font-weight:800; }
+  .result-facts { display:grid; grid-template-columns:1fr 1fr; gap:.6rem; }
+  .result-fact { background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:.75rem; }
+  .result-fact span { display:block; color:var(--text-muted); font-size:.7rem; }
+  .result-fact strong { display:block; color:var(--heading); font-size:.9rem; margin-top:.2rem; }
+  .report-card { display:none; }
+  .highlight-found { animation:highlightFound 1.6s ease; }
+  @keyframes highlightFound { 0%,100% { box-shadow:var(--shadow); } 30%,70% { box-shadow:0 0 0 5px var(--amber),var(--shadow); } }
+  @media(max-width:820px) {
+    .dashboard-grid,.revision-layout,.results-dashboard { grid-template-columns:1fr; }
+    .dashboard-two { grid-template-columns:1fr; }
+    .teacher-grid { grid-template-columns:1fr; }
+  }
+  @media(max-width:680px) {
+    body { padding-bottom:64px; }
+    nav { height:56px; padding:0 .75rem; }
+    .nav-brand { font-size:.9rem; }
+    .nav-tabs { display:none; }
+    .theme-toggle-btn { width:32px; height:32px; }
+    .hero { padding:2.2rem 1rem 1.8rem; }
+    .hero h1 { font-size:1.8rem; }
+    .dashboard-top { display:block; }
+    .dashboard-actions { justify-content:flex-start; margin-top:1rem; }
+    .metric-grid { grid-template-columns:1fr 1fr; }
+    .journey { margin-inline:-.2rem; }
+    .case-grid,.exam-summary { grid-template-columns:1fr 1fr; }
+    .exam-choice-grid,.practice-options,.lab-steps { grid-template-columns:1fr; }
+    .match-layout { grid-template-columns:1fr; }
+    .flashcard-scene,.flashcard { min-height:250px; }
+    .bottom-nav { position:fixed; display:grid; grid-template-columns:repeat(5,1fr); bottom:0; inset-inline:0; height:62px; z-index:300; background:color-mix(in srgb,var(--surface) 94%,transparent); border-top:1px solid var(--border); backdrop-filter:blur(14px); }
+    .bottom-nav button { border:0; background:none; color:var(--text-muted); font:inherit; font-size:.62rem; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:.15rem; cursor:pointer; }
+    .bottom-nav button.active { color:var(--teal); font-weight:800; }
+    .bottom-nav svg { width:1.15rem; height:1.15rem; }
+    .quiz-intro-body { padding:1.25rem 1rem 1.5rem; }
+    .exam-question-head,.exam-interaction { padding:1rem; }
+    .exam-action-row { align-items:stretch; }
+    .exam-action-row .btn { flex:1; justify-content:center; }
+  }
+  @media(prefers-reduced-motion:reduce) {
+    *,*::before,*::after { scroll-behavior:auto !important; animation-duration:.001ms !important; transition-duration:.001ms !important; }
+  }
+  @media print {
+    body.print-report nav, body.print-report .hero, body.print-report footer, body.print-report .bottom-nav,
+    body.print-report .dashboard-top .dashboard-actions, body.print-report .dashboard-card:not(:last-child),
+    body.print-report .mark-done-row, body.print-report .toast-region { display:none !important; }
+    body.print-report .section:not(#dashboard) { display:none !important; }
+    body.print-report #dashboard { display:block !important; max-width:100%; padding:1rem; }
+    body.print-report #dashboard > .dashboard-card:not(:last-child), body.print-report #dashboard > .dashboard-grid,
+    body.print-report #dashboard > .dashboard-two { display:none !important; }
+    body.print-report #dashboard > .dashboard-card:last-child { display:block !important; box-shadow:none; border:0; }
+    body.print-report .report-card { display:block !important; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-brand">
+    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 2h6l1 3v2.5c0 .8.2 1.6.6 2.3l3 5.4c.9 1.6-.3 3.8-2.2 3.8H8.6c-1.9 0-3.1-2.2-2.2-3.8l3-5.4c.4-.7.6-1.5.6-2.3V5z"/><path d="M7.5 14h9"/></svg>
+    <span data-i18n="nav_brand">Contrôle du Lait</span>
+  </div>
+  <div class="nav-tabs">
+    <button class="nav-tab active" data-section="dashboard" onclick="showSection('dashboard',this)" aria-label="Tableau de bord"><span data-i18n="nav_dashboard">Accueil</span></button>
+    <button class="nav-tab" data-section="s1" onclick="showSection('s1',this)"><span class="tick hidden" id="tick-s1"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span><span data-i18n="nav_l1">Leçon 1</span></button>
+    <button class="nav-tab" data-section="s2" onclick="showSection('s2',this)"><span class="tick hidden" id="tick-s2"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span><span data-i18n="nav_l2">Leçon 2</span></button>
+    <button class="nav-tab" data-section="s3" onclick="showSection('s3',this)"><span class="tick hidden" id="tick-s3"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span><span data-i18n="nav_l3">Leçon 3</span></button>
+    <button class="nav-tab" data-section="revision" onclick="showSection('revision',this)" data-i18n="nav_revision">Révision</button>
+    <button class="nav-tab" data-section="practice" onclick="showSection('practice',this)" data-i18n="nav_practice">Entraînement</button>
+    <button class="nav-tab" data-section="quiz" onclick="showSection('quiz',this)"><span data-i18n="nav_quiz">Testez-vous</span></button>
+  </div>
+  <div class="lang-toggle">
+    <button class="lang-btn active" id="lang-btn-fr" onclick="applyLanguage('fr')">FR</button>
+    <button class="lang-btn" id="lang-btn-ar" onclick="applyLanguage('ar')">AR</button>
+  </div>
+  <button class="theme-toggle-btn" id="themeToggleBtn" onclick="toggleTheme()" aria-label="Basculer le mode sombre">
+    <svg class="icon" id="themeIconMoon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3 7 7 0 0 0 21 12.8z"/></svg>
+    <svg class="icon" id="themeIconSun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;"><circle cx="12" cy="12" r="4.5"/><path d="M12 2.5v2.5M12 19v2.5M4.2 4.2l1.8 1.8M18 18l1.8 1.8M2.5 12H5M19 12h2.5M4.2 19.8L6 18M18 6l1.8-1.8"/></svg>
+  </button>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-bg" style="background-image:url('https://images.pexels.com/photos/1435706/pexels-photo-1435706.jpeg?auto=compress&cs=tinysrgb&w=1400');"></div>
+  <div class="hero-label" data-i18n="hero_label">INSFP Bousaâda — Niveau 5</div>
+  <h1 data-i18n="hero_h1">Contrôle du Lait</h1>
+  <p class="tagline" data-i18n="hero_tagline">Spécialité Contrôle de la Qualité — résumé interactif complet des trois leçons</p>
+
+  <div class="hero-progress-wrap">
+    <div class="hero-progress-label">
+      <span data-i18n="hero_progress_label">Progression du cours</span>
+      <span id="hero-progress-text">0/4</span>
+    </div>
+    <div class="hero-progress-bg"><div class="hero-progress-fill" id="hero-progress-fill"></div></div>
+  </div>
+
+  <div class="hero-stats">
+    <div class="hero-stat"><strong>3</strong><small data-i18n="hero_stat_lessons">Leçons</small></div>
+    <div class="hero-stat"><strong>pH 6.5–6.7</strong><small data-i18n="hero_stat_ph">Acidité normale du lait</small></div>
+    <div class="hero-stat"><strong>140°C</strong><small data-i18n="hero_stat_uht">Température de stérilisation UHT</small></div>
+  </div>
+
+  <div class="hero-actions">
+    <button class="btn btn-light" onclick="window.print()">
+      <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9V2h12v7"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+      <span data-i18n="hero_btn_pdf">Télécharger le résumé (PDF)</span>
+    </button>
+    <button class="btn btn-ghost" data-section="quiz" onclick="showSection('quiz',document.querySelector('[data-section=quiz]'))">
+      <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+      <span data-i18n="hero_btn_quiz">Passer le test</span>
+    </button>
+  </div>
+</div>
+
+<!-- ═══════════════ STUDENT DASHBOARD ═══════════════ -->
+<section class="section section-dashboard active" id="dashboard">
+  <div class="dashboard-top">
+    <div>
+      <div class="eyebrow" data-i18n="dashboard_eyebrow">PARCOURS INSFP · NIVEAU 5</div>
+      <h2 class="dashboard-title" data-i18n="dashboard_title">Votre espace d'apprentissage</h2>
+      <p class="dashboard-subtitle" data-i18n="dashboard_subtitle">Reprenez votre progression et consolidez les notions essentielles du contrôle du lait.</p>
+    </div>
+    <div class="dashboard-actions">
+      <button class="btn btn-primary" onclick="continueLearning()" data-i18n="dashboard_continue">Continuer</button>
+      <button class="btn btn-outline" onclick="showSection('revision',document.querySelector('[data-section=revision]'))" data-i18n="dashboard_revision">Mode Révision</button>
+    </div>
+  </div>
+
+  <div class="dashboard-grid">
+    <div class="dashboard-card continue-card">
+      <div class="eyebrow" data-i18n="dashboard_next_label">PROCHAINE ÉTAPE</div>
+      <h3 data-i18n="dashboard_next_title">Continuez là où vous vous êtes arrêté</h3>
+      <div class="continue-meta">
+        <div class="continue-icon" id="continueIcon">01</div>
+        <div><div class="continue-name" id="continueName">Leçon 1 — Propriétés du lait</div><div class="continue-detail" id="continueDetail">Notions physico-chimiques</div></div>
+      </div>
+      <button class="btn btn-light" onclick="continueLearning()" data-i18n="dashboard_open_lesson">Ouvrir la leçon</button>
+    </div>
+    <div class="dashboard-card">
+      <h3 data-i18n="dashboard_progress_title">Progression globale</h3>
+      <div class="ring-row">
+        <div class="progress-ring" id="dashboardRing" style="--progress:0"><strong id="dashboardProgress">0%</strong></div>
+        <div class="ring-copy"><strong id="dashboardLessonCount">0/3 leçons</strong><span data-i18n="dashboard_progress_hint">Chaque étape validée reste enregistrée sur cet appareil.</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="dashboard-card" style="margin-bottom:1.2rem;">
+    <h3 data-i18n="dashboard_stats_title">Votre activité</h3>
+    <div class="metric-grid">
+      <div class="metric"><div class="metric-value" id="dashBest">—</div><span class="metric-label" data-i18n="dashboard_best">Meilleur examen</span></div>
+      <div class="metric"><div class="metric-value" id="dashLast">—</div><span class="metric-label" data-i18n="dashboard_last">Dernier examen</span></div>
+      <div class="metric"><div class="metric-value" id="dashAttempts">0</div><span class="metric-label" data-i18n="dashboard_attempts">Tentatives</span></div>
+      <div class="metric"><div class="metric-value" id="dashStreak">0</div><span class="metric-label" data-i18n="dashboard_streak">Jours actifs</span></div>
+    </div>
+  </div>
+
+  <div class="dashboard-card" style="margin-bottom:1.2rem;">
+    <h3 data-i18n="dashboard_journey_title">Votre parcours</h3>
+    <div class="journey" id="courseJourney"></div>
+  </div>
+
+  <div class="dashboard-two">
+    <div class="dashboard-card smart-review">
+      <h3 data-i18n="dashboard_smart_title">Révision ciblée</h3>
+      <div class="weakness"><div><strong id="weakTopic" data-i18n="dashboard_no_weakness">Pas encore de point faible</strong><div class="topic-bar"><span id="weakTopicBar" style="width:0"></span></div></div><strong id="weakRate">—</strong></div>
+      <p class="dashboard-subtitle" id="smartReviewText" data-i18n="dashboard_smart_hint">Passez l'épreuve ou utilisez les cartes pour générer vos premières données.</p>
+      <button class="btn btn-outline" onclick="focusWeakTopic()" data-i18n="dashboard_review_weak">Réviser ce thème</button>
+    </div>
+    <div class="dashboard-card">
+      <h3 data-i18n="dashboard_timer_title">Temps d'étude</h3>
+      <div class="timer-card">
+        <div><div class="timer-display" id="studyTimerDisplay">25:00</div><span class="dashboard-subtitle" data-i18n="dashboard_timer_hint">Une session courte et concentrée.</span></div>
+        <div class="timer-presets">
+          <button class="timer-preset" onclick="setStudyTimer(25)">25 min</button>
+          <button class="timer-preset" onclick="setStudyTimer(45)">45 min</button>
+          <button class="timer-preset" onclick="setStudyTimer(60)">60 min</button>
+          <button class="btn btn-primary" id="studyTimerBtn" onclick="toggleStudyTimer()" data-i18n="timer_start">Démarrer</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="dashboard-card" style="margin-top:1.2rem;">
+    <div class="dashboard-top" style="margin-bottom:.8rem;">
+      <div><div class="eyebrow" data-i18n="teacher_eyebrow">OUTIL OPTIONNEL</div><h3 style="margin-bottom:0;" data-i18n="teacher_title">Mode Professeur</h3></div>
+      <button class="btn btn-outline" onclick="printTeacherReport()" data-i18n="teacher_print">Imprimer le relevé</button>
+    </div>
+    <p class="dashboard-subtitle" data-i18n="teacher_hint">Préparez un relevé imprimable à partir de la dernière épreuve enregistrée.</p>
+    <div class="teacher-grid">
+      <label data-i18n="teacher_student">Étudiant<input id="teacherStudent" type="text" placeholder="Nom et prénom"></label>
+      <label data-i18n="teacher_class">Classe / groupe<input id="teacherClass" type="text" placeholder="Groupe"></label>
+      <label data-i18n="teacher_date">Date<input id="teacherDate" type="date"></label>
+    </div>
+    <div id="teacherReport" class="report-card"></div>
+  </div>
+</section>
+
+<!-- ═══════════════ SECTION 1 ═══════════════ -->
+<section class="section" id="s1">
+  <div class="lesson-header">
+    <div class="lesson-icon"><img src="https://images.pexels.com/photos/4324320/pexels-photo-4324320.jpeg?auto=compress&cs=tinysrgb&w=300" alt="" loading="lazy" onerror="this.style.opacity=0"></div>
+    <div class="lesson-header-text">
+      <h2 data-i18n="l1_title">Leçon 1 — Propriétés physico-chimiques du lait</h2>
+      <p data-i18n="l1_subtitle">Objectif : connaître les propriétés physiques et chimiques du lait et leur importance dans le contrôle de la qualité</p>
+    </div>
+  </div>
+
+  <div class="section-title" data-i18n="l1_sec1_title">I. Propriétés physiques</div>
+  <div class="alert alert-blue">
+    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+    <div data-i18n="l1_alert1">Les propriétés physiques dépendent de tous les composants du lait : eau, matières grasses, protéines et lactose. Des propriétés comme la densité, l'acidité et le point de congélation sont des indicateurs directs de la qualité du lait.</div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 2h6M10 2v6.5L5 18a2 2 0 0 0 1.8 3h10.4a2 2 0 0 0 1.8-3l-5-9.5V2"/></svg>
+        <span data-i18n="l1_table1_title">Tableau des propriétés physiques</span>
+      </div>
+      <table class="data-table">
+        <thead><tr><th data-i18n="l1_th_prop">Propriété</th><th data-i18n="l1_th_norm">Norme / valeur standard</th></tr></thead>
+        <tbody>
+          <tr><td data-i18n="l1_row_ph">pH</td><td>6.5 – 6.7</td></tr>
+          <tr><td data-i18n="l1_row_acid">Acidité titrable</td><td data-i18n="l1_row_acid_val">15 – 17° D (Dornic)</td></tr>
+          <tr><td data-i18n="l1_row_dens">Densité à 20°C</td><td>1.028 – 1.036</td></tr>
+          <tr><td data-i18n="l1_row_freeze">Point de congélation</td><td>−0.51°C à −0.55°C</td></tr>
+          <tr><td data-i18n="l1_row_boil">Point d'ébullition</td><td>100.5°C</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="card">
+      <div class="card-title">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+        <span data-i18n="l1_expl_title">Explication des propriétés</span>
+      </div>
+      <div class="info-row"><div class="info-dot" style="background:var(--blue-mid)"></div><div data-i18n="l1_expl_ph"><strong>pH :</strong> le lait frais est proche de la neutralité (6,5–6,7). Toute baisse vers l'acidité affecte la stabilité de la caséine et l'équilibre minéral.</div></div>
+      <div class="info-row"><div class="info-dot" style="background:var(--teal)"></div><div data-i18n="l1_expl_acid"><strong>Acidité :</strong> exprimée en degrés Dornic (décigramme d'acide lactique par litre). L'acidité naturelle provient des protéines, des phosphates et de l'acide citrique.</div></div>
+      <div class="info-row"><div class="info-dot" style="background:var(--amber)"></div><div data-i18n="l1_expl_dens"><strong>Densité :</strong> liée à l'extrait sec — plus la teneur en matière grasse est élevée, plus elle diminue. Elle se mesure au lactodensimètre.</div></div>
+      <div class="info-row"><div class="info-dot" style="background:var(--purple)"></div><div data-i18n="l1_expl_freeze"><strong>Point de congélation :</strong> relativement constant (−0,53°C) — toute hausse indique un mouillage (fraude à l'eau).</div></div>
+    </div>
+  </div>
+
+  <div class="section-title" data-i18n="l1_sec2_title">II. Composition chimique du lait</div>
+
+  <div class="card" style="margin-bottom:1.2rem;">
+    <div class="card-title">
+      <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M18 17V9M13 17V5M8 17v-5"/></svg>
+      <span data-i18n="l1_chart_title">Composition moyenne du lait de vache (g/L)</span>
+    </div>
+    <div class="comp-chart" id="compChart">
+      <div class="comp-bar-row"><div class="comp-label" data-i18n="l1_comp_water">Eau</div><div class="comp-bar-bg"><div class="comp-bar-fill" style="width:90.5%;background:#2B6CB0;">905</div></div><div class="comp-val">905</div></div>
+      <div class="comp-bar-row"><div class="comp-label" data-i18n="l1_comp_lactose">Lactose (sucre)</div><div class="comp-bar-bg"><div class="comp-bar-fill" style="width:49%;background:#1A7A6E;">49</div></div><div class="comp-val">49</div></div>
+      <div class="comp-bar-row"><div class="comp-label" data-i18n="l1_comp_fat">Matières grasses</div><div class="comp-bar-bg"><div class="comp-bar-fill" style="width:35%;background:#C47C00;">35</div></div><div class="comp-val">35</div></div>
+      <div class="comp-bar-row"><div class="comp-label" data-i18n="l1_comp_protein">Protéines</div><div class="comp-bar-bg"><div class="comp-bar-fill" style="width:34%;background:#5B3A8C;">34</div></div><div class="comp-val">34</div></div>
+      <div class="comp-bar-row"><div class="comp-label" data-i18n="l1_comp_casein">Caséine</div><div class="comp-bar-bg"><div class="comp-bar-fill" style="width:27%;background:#7B51B0;">27</div></div><div class="comp-val">27</div></div>
+      <div class="comp-bar-row"><div class="comp-label" data-i18n="l1_comp_salts">Sels minéraux</div><div class="comp-bar-bg"><div class="comp-bar-fill" style="width:9%;background:#1F7A45;">9</div></div><div class="comp-val">9</div></div>
+      <div class="comp-bar-row"><div class="comp-label" data-i18n="l1_comp_wheyprot">Protéines solubles</div><div class="comp-bar-bg"><div class="comp-bar-fill" style="width:2.5%;background:#B06020;min-width:40px;">2.5</div></div><div class="comp-val">2.5</div></div>
+    </div>
+    <div style="font-size:0.78rem;color:var(--text-muted);margin-top:0.3rem;" data-i18n="l1_chart_caption">Extrait sec total : 127 g/L | Extrait sec dégraissé : 92 g/L</div>
+  </div>
+
+  <div class="grid-3">
+    <div class="card">
+      <div class="card-title">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.7s6 6.5 6 11.3a6 6 0 0 1-12 0c0-4.8 6-11.3 6-11.3z"/></svg>
+        <span data-i18n="l1_water_title">Eau</span>
+      </div>
+      <div style="font-size:0.87rem;line-height:1.6;" data-i18n="l1_water_body">Il représente <strong>90,5 %</strong> du lait. Présent sous deux formes : eau libre (87,3 %) et eau liée (3,7 %) associée aux protéines.</div>
+    </div>
+    <div class="card">
+      <div class="card-title">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="7" cy="8" r="2.3"/><circle cx="16" cy="7" r="2"/><circle cx="17" cy="16" r="2.5"/><circle cx="8" cy="17" r="1.7"/><path d="M8.7 9.9l6 -1.2M9.3 10.5l6 4M9 15.5l6-1"/></svg>
+        <span data-i18n="l1_casein_title">Caséine</span>
+      </div>
+      <div style="font-size:0.87rem;line-height:1.6;" data-i18n="l1_casein_body">La protéine principale (80 % du total des protéines). Présente sous forme de <strong>micelles</strong> colloïdales. Responsable de la couleur blanche du lait.</div>
+    </div>
+    <div class="card">
+      <div class="card-title">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l2.6 5.3 5.9.8-4.3 4.1 1 5.8-5.2-2.7-5.2 2.7 1-5.8-4.3-4.1 5.9-.8z"/></svg>
+        <span data-i18n="l1_lactose_title">Lactose</span>
+      </div>
+      <div style="font-size:0.87rem;line-height:1.6;" data-i18n="l1_lactose_body">Le seul sucre du lait (un diholoside). Il est fermenté par les bactéries lactiques pour produire de l'<strong>acide lactique</strong>.</div>
+    </div>
+  </div>
+
+  <div class="section-title" data-i18n="l1_sec3_title">III. Substances chimiques indésirables</div>
+  <div class="grid-3">
+    <div class="alert alert-red">
+      <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.5 20.5L3 13a4.95 4.95 0 1 1 7-7l1 1 1-1a4.95 4.95 0 1 1 7 7l-2 2"/><path d="M16 16l3 3M19 16l-3 3"/></svg>
+      <div data-i18n="l1_sub_antibio"><strong>Antibiotiques</strong><br>Résidus des traitements contre les mammites. Risques : allergies, cancer, résistance bactérienne (flore endogène antibiorésistante).</div>
+    </div>
+    <div class="alert alert-amber">
+      <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v4M12 17h.01M10.3 3.9L2.5 17a2 2 0 0 0 1.7 3h15.6a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/></svg>
+      <div data-i18n="l1_sub_pest"><strong>Pesticides</strong><br>Composés polychlorés liposolubles. Ils s'accumulent dans les réserves graisseuses et sont libérés lors de leur mobilisation.</div>
+    </div>
+    <div class="alert alert-purple">
+      <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+      <div data-i18n="l1_sub_metals"><strong>Métaux lourds</strong><br>Sélénium, arsenic, plomb, mercure — polluants environnementaux dangereux pour la santé à certains niveaux.</div>
+    </div>
+  </div>
+
+  <div class="mark-done-row">
+    <button class="mark-done-btn" id="done-s1" onclick="toggleDone('s1')">
+      <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+      <span data-i18n="mark_done">Marquer comme terminé</span>
+    </button>
+  </div>
+</section>
+
+<!-- ═══════════════ SECTION 2 ═══════════════ -->
+<section class="section" id="s2">
+  <div class="lesson-header">
+    <div class="lesson-icon"><img src="https://images.pexels.com/photos/3938022/pexels-photo-3938022.jpeg?auto=compress&cs=tinysrgb&w=300" alt="" loading="lazy" onerror="this.style.opacity=0"></div>
+    <div class="lesson-header-text">
+      <h2 data-i18n="l2_title">Leçon 2 — Qualité du lait</h2>
+      <p data-i18n="l2_subtitle">Objectif : connaître les différents aspects de la qualité organoleptique et microbiologique du lait</p>
+    </div>
+  </div>
+
+  <div class="sub-tabs">
+    <button class="sub-tab active" onclick="showPanel('p-org',this)" data-i18n="l2_tab_org">Qualité organoleptique</button>
+    <button class="sub-tab" onclick="showPanel('p-micro',this)" data-i18n="l2_tab_micro">Qualité microbiologique</button>
+    <button class="sub-tab" onclick="showPanel('p-path',this)" data-i18n="l2_tab_path">Bactéries pathogènes</button>
+  </div>
+
+  <div class="sub-panel active" id="p-org">
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/><circle cx="12" cy="12" r="3"/></svg>
+          <span data-i18n="l2_org_color_title">Couleur</span>
+        </div>
+        <div style="font-size:0.88rem;line-height:1.65;" data-i18n="l2_org_color_body">Le lait est <strong>blanc mat</strong> en raison de la matière grasse qui reflète la lumière. Le lait écrémé présente une légère teinte bleutée due à la caséine. La couleur jaune indique une teneur élevée en carotènes en été.</div>
+        <div style="margin-top:0.8rem;display:flex;gap:0.5rem;flex-wrap:wrap;">
+          <span class="pill pill-blue" data-i18n="l2_org_color_pill1">Blanc mat ✓</span>
+          <span class="pill pill-amber" data-i18n="l2_org_color_pill2">Jaune = été</span>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5a3 3 0 1 1 6 0v6a5 5 0 0 1-10 0"/><path d="M9 11h6"/><path d="M17 12c1.5 0 2.5 1.5 2.5 3.5S18.5 20 15 20"/></svg>
+          <span data-i18n="l2_org_smell_title">Odeur</span>
+        </div>
+        <div style="font-size:0.88rem;line-height:1.65;" data-i18n="l2_org_smell_body">Odeur caractéristique <strong>liée à la matière grasse</strong> et à l'environnement de traite. Les graisses absorbent les odeurs de l'étable et du fourrage. Lors du stockage, une <strong>odeur acide</strong> apparaît due à la fermentation lactique et à la production d'acide lactique.</div>
+      </div>
+      <div class="card">
+        <div class="card-title">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10c0 6 4 10 9 10s9-4 9-10"/><path d="M3 10a9 5 0 0 1 18 0"/><path d="M9 10.5c.5 1 1.5 1.5 3 1.5s2.5-.5 3-1.5"/></svg>
+          <span data-i18n="l2_org_taste_title">Goût</span>
+        </div>
+        <div style="font-size:0.88rem;line-height:1.65;" data-i18n="l2_org_taste_body">Goût <strong>légèrement sucré</strong> dû au lactose (49 g/L). Aucun goût salé malgré la présence de sels minéraux. La matière grasse apporte onctuosité et rondeur.</div>
+      </div>
+      <div class="card">
+        <div class="card-title">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l2.4 4.9 5.4.8-3.9 3.8.9 5.4-4.8-2.5-4.8 2.5.9-5.4-3.9-3.8 5.4-.8z"/></svg>
+          <span data-i18n="l2_org_flavor_title">Flaveur</span>
+        </div>
+        <div style="font-size:0.88rem;line-height:1.65;" data-i18n="l2_org_flavor_body">Un équilibre subtil entre <strong>acides, alcools, esters, amines, composés carbonylés et soufrés</strong>, en interaction avec les matières grasses et protéiques.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sub-panel" id="p-micro">
+    <div class="alert alert-blue">
+      <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 2v3.5a4 4 0 0 0 1 2.6l1.2 1.4a2 2 0 0 1 .3 2.2l-2 4a4 4 0 0 0 3.6 5.8h0a4 4 0 0 0 3.9-3.1l1-4.4a2 2 0 0 0-.6-1.9L16 10.5a4 4 0 0 1-1-2.7V4"/><path d="M6 2h12"/><path d="M6 22a2 2 0 0 1-2-2"/></svg>
+      <div data-i18n="l2_micro_alert">Le lait est une denrée très périssable : pH proche de la neutralité + richesse en nutriments = milieu idéal pour la prolifération des micro-organismes (bactéries, levures, moisissures).</div>
+    </div>
+
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="7"/><circle cx="9" cy="10" r="1"/><circle cx="14" cy="9" r="1"/><circle cx="15" cy="14" r="1"/><path d="M12 5v-2M12 21v-2M5 12H3M21 12h-2"/></svg>
+          <span data-i18n="l2_flora_orig_title">Flore originelle</span>
+        </div>
+        <div style="font-size:0.85rem;color:var(--text-muted);margin-bottom:0.8rem;" data-i18n="l2_flora_orig_sub">Moins de 10³ germes/mL dans le lait d'un animal sain</div>
+        <table class="data-table">
+          <thead><tr><th data-i18n="l2_th_organism">Micro-organisme</th><th data-i18n="l2_th_pct">Proportion %</th></tr></thead>
+          <tbody>
+            <tr><td><em>Micrococcus sp.</em></td><td>30 – 90%</td></tr>
+            <tr><td><em>Lactobacillus sp.</em></td><td>10 – 30%</td></tr>
+            <tr><td><em>Streptococcus / Lactococcus</em></td><td>&lt; 10%</td></tr>
+            <tr><td data-i18n="l2_row_gramneg">Gram négatif</td><td>&lt; 10%</td></tr>
+          </tbody>
+        </table>
+        <div class="info-row" style="margin-top:0.6rem;">
+          <div class="info-dot" style="background:var(--green)"></div>
+          <div style="font-size:0.82rem;" data-i18n="l2_flora_orig_note">Ces micro-organismes n'altèrent pas la qualité dans des conditions normales.</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v4M12 17h.01M10.3 3.9L2.5 17a2 2 0 0 0 1.7 3h15.6a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/></svg>
+          <span data-i18n="l2_flora_contam_title">Flore de contamination</span>
+        </div>
+        <div class="info-row"><div class="info-dot" style="background:var(--amber)"></div><div data-i18n="l2_flora_contam1"><strong>Flore d'altération :</strong> coliformes, levures, moisissures — provoquent des défauts organoleptiques et réduisent la durée de conservation.</div></div>
+        <div class="info-row"><div class="info-dot" style="background:var(--red)"></div><div data-i18n="l2_flora_contam2"><strong>Flore pathogène :</strong> Salmonella, Listeria, staphylocoques — dangereuse pour la santé.</div></div>
+        <div class="info-row"><div class="info-dot" style="background:var(--blue-mid)"></div><div data-i18n="l2_flora_contam3"><strong>Coliformes :</strong> indicateurs de contamination fécale. Ils fermentent le lactose avec production de gaz à 30°C.</div></div>
+        <div class="info-row"><div class="info-dot" style="background:var(--purple)"></div><div data-i18n="l2_flora_contam4"><strong>Levures :</strong> <em>Kluyveromyces lactis, Saccharomyces cerevisiae</em> — provoquent rarement des problèmes.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sub-panel" id="p-path">
+    <div class="alert alert-red">
+      <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.3 3.9L2.5 17a2 2 0 0 0 1.7 3h15.6a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/><path d="M12 9v4M12 17h.01"/></svg>
+      <div data-i18n="l2_path_alert">La contamination peut être interne (sécrétion de la mamelle) ou externe (troupeaux infectés, eau, homme). Elle comprend les bactéries infectieuses et les bactéries toxinogènes.</div>
+    </div>
+
+    <div class="bacteria-card">
+      <div class="bacteria-header" onclick="toggleBacteria(this)">
+        <div class="bacteria-photo"><img src="https://images.pexels.com/photos/8940346/pexels-photo-8940346.jpeg?auto=compress&cs=tinysrgb&w=200" alt="" loading="lazy" onerror="this.parentElement.style.background='var(--red-light)'"></div>
+        <div>
+          <div class="bacteria-name">Salmonella</div>
+          <div class="bacteria-type"><span class="pill pill-red" data-i18n="l2_b1_pill">Bactérie infectieuse</span></div>
+        </div>
+        <div class="bacteria-chevron"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></div>
+      </div>
+      <div class="bacteria-body">
+        <div class="bacteria-grid">
+          <div class="b-stat"><div class="b-stat-label" data-i18n="l2_stat_temp">Plage de température</div><div class="b-stat-val">4°C – 47°C</div></div>
+          <div class="b-stat"><div class="b-stat-label" data-i18n="l2_stat_opt">Optimum de croissance</div><div class="b-stat-val">35 – 40°C</div></div>
+          <div class="b-stat"><div class="b-stat-label" data-i18n="l2_stat_ph">Plage de pH</div><div class="b-stat-val">5 – 9</div></div>
+          <div class="b-stat"><div class="b-stat-label" data-i18n="l2_stat_destroy">Destruction par pasteurisation</div><div class="b-stat-val" data-i18n="l2_stat_destroy_val">72°C / 15 secondes</div></div>
+        </div>
+        <div class="info-row" style="margin-top:0.6rem;"><div class="info-dot" style="background:var(--blue-mid)"></div><div style="font-size:0.85rem;" data-i18n="l2_b1_note1">Aéro-anaérobie facultative — se développe en l'absence d'oxygène. Résistante à la réfrigération et à la congélation, mais détruite par la pasteurisation.</div></div>
+        <div class="info-row"><div class="info-dot" style="background:var(--red)"></div><div style="font-size:0.85rem;" data-i18n="l2_b1_note2">Symptômes : diarrhée, vomissements, maux de tête, troubles digestifs après ingestion.</div></div>
+      </div>
+    </div>
+
+    <div class="bacteria-card">
+      <div class="bacteria-header" onclick="toggleBacteria(this)">
+        <div class="bacteria-photo"><img src="https://images.pexels.com/photos/6203349/pexels-photo-6203349.jpeg?auto=compress&cs=tinysrgb&w=200" alt="" loading="lazy" onerror="this.parentElement.style.background='var(--red-light)'"></div>
+        <div>
+          <div class="bacteria-name">Listeria monocytogenes</div>
+          <div class="bacteria-type"><span class="pill pill-red" data-i18n="l2_b2_pill">Bactérie infectieuse — très dangereuse</span></div>
+        </div>
+        <div class="bacteria-chevron"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></div>
+      </div>
+      <div class="bacteria-body">
+        <div class="bacteria-grid">
+          <div class="b-stat"><div class="b-stat-label" data-i18n="l2_stat_temp">Plage de température</div><div class="b-stat-val">0°C – 45°C</div></div>
+          <div class="b-stat"><div class="b-stat-label" data-i18n="l2_stat_opt">Optimum de croissance</div><div class="b-stat-val">30 – 37°C</div></div>
+          <div class="b-stat"><div class="b-stat-label" data-i18n="l2_stat_ph">Plage de pH</div><div class="b-stat-val">4.5 – 9.6</div></div>
+          <div class="b-stat"><div class="b-stat-label" data-i18n="l2_stat_shape">Forme</div><div class="b-stat-val" data-i18n="l2_stat_shape_val">Petits bacilles Gram+</div></div>
+        </div>
+        <div class="alert alert-red" style="margin-top:0.7rem;margin-bottom:0;">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v5M12 16h.01"/></svg>
+          <div style="font-size:0.83rem;" data-i18n="l2_b2_note"><strong>Danger majeur :</strong> elle se développe même au froid (0°C) ! Elle résiste à des conditions extrêmes (chaleur, pH, salinité). Elle est considérée comme un « agent pathogène alimentaire redoutable » en raison de sa large diffusion.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="bacteria-card">
+      <div class="bacteria-header" onclick="toggleBacteria(this)">
+        <div class="bacteria-photo"><img src="https://images.pexels.com/photos/3786246/pexels-photo-3786246.jpeg?auto=compress&cs=tinysrgb&w=200" alt="" loading="lazy" onerror="this.parentElement.style.background='var(--amber-light)'"></div>
+        <div>
+          <div class="bacteria-name" data-i18n="l2_b3_name">Bactéries toxinogènes</div>
+          <div class="bacteria-type"><span class="pill pill-amber" data-i18n="l2_b3_pill">Toxines thermorésistantes</span></div>
+        </div>
+        <div class="bacteria-chevron"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></div>
+      </div>
+      <div class="bacteria-body">
+        <div class="info-row"><div class="info-dot" style="background:var(--red)"></div><div style="font-size:0.85rem;" data-i18n="l2_b3_note1">Elles produisent une toxine dans l'aliment — détruire la bactérie ne suffit pas ! La toxine reste active même après pasteurisation et stérilisation.</div></div>
+        <div class="info-row"><div class="info-dot" style="background:var(--amber)"></div><div style="font-size:0.85rem;" data-i18n="l2_b3_note2"><em>Staphylococcus aureus</em> : l'exemple le plus marquant — sa toxine résiste à la chaleur (100°C / 30 minutes). Sa source : les éleveurs infectés.</div></div>
+        <div class="info-row"><div class="info-dot" style="background:var(--purple)"></div><div style="font-size:0.85rem;" data-i18n="l2_b3_note3"><em>Clostridium botulinum</em> : toxine botulique — la plus redoutable dans les conserves.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="mark-done-row">
+    <button class="mark-done-btn" id="done-s2" onclick="toggleDone('s2')">
+      <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+      <span data-i18n="mark_done">Marquer comme terminé</span>
+    </button>
+  </div>
+</section>
+
+<!-- ═══════════════ SECTION 3 ═══════════════ -->
+<section class="section" id="s3">
+  <div class="lesson-header">
+    <div class="lesson-icon"><img src="https://images.pexels.com/photos/2889347/pexels-photo-2889347.jpeg?auto=compress&cs=tinysrgb&w=300" alt="" loading="lazy" onerror="this.style.opacity=0"></div>
+    <div class="lesson-header-text">
+      <h2 data-i18n="l3_title">Leçon 3 — Technologie de fabrication du lait UHT</h2>
+      <p data-i18n="l3_subtitle">Objectif : connaître la technologie de fabrication du lait UHT, des matières premières jusqu'au conditionnement final</p>
+    </div>
+  </div>
+
+  <div class="alert alert-green">
+    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/><path d="M9 7h7M9 11h7M9 15h4"/></svg>
+    <div data-i18n="l3_alert_def"><strong>Définition du lait UHT (Ultra-Haute-Température) :</strong> un lait ayant subi un traitement thermique intense qui détruit tous les micro-organismes tout en préservant la valeur nutritive (sauf une faible quantité de vitamine C). Il se conserve 3 mois en emballage fermé à température ambiante.</div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 2h6l1 3v2.5c0 .8.2 1.6.6 2.3l3 5.4c.9 1.6-.3 3.8-2.2 3.8H8.6c-1.9 0-3.1-2.2-2.2-3.8l3-5.4c.4-.7.6-1.5.6-2.3V5z"/></svg>
+        <span data-i18n="l3_raw_title">Matières premières</span>
+      </div>
+      <div class="info-row"><div class="info-dot" style="background:var(--blue-mid)"></div><div data-i18n="l3_raw1"><strong>Eau :</strong> eau de ville traitée.</div></div>
+      <div class="info-row"><div class="info-dot" style="background:var(--amber)"></div><div data-i18n="l3_raw2"><strong>Poudre de lait entier (26 %) :</strong> préparée par le procédé SPRAY — élimine 96 à 97 % de l'eau. Solubilité de 99,80 %.</div></div>
+      <div class="info-row"><div class="info-dot" style="background:var(--teal)"></div><div data-i18n="l3_raw3"><strong>Poudre de lait écrémé (0 %) :</strong> utilisée en complément de la poudre entière pour obtenir le taux de matière grasse souhaité.</div></div>
+    </div>
+    <div class="card">
+      <div class="card-title">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg>
+        <span data-i18n="l3_compare_title">Comparaison des traitements thermiques</span>
+      </div>
+      <table class="data-table">
+        <thead><tr><th data-i18n="l3_th_type">Type</th><th data-i18n="l3_th_temp">Température</th><th data-i18n="l3_th_dur">Durée</th></tr></thead>
+        <tbody>
+          <tr><td data-i18n="l3_row_pastlow">Pasteurisation basse</td><td>63°C</td><td data-i18n="l3_row_pastlow_dur">30 min</td></tr>
+          <tr><td data-i18n="l3_row_pasthigh">Pasteurisation haute</td><td>80–85°C</td><td data-i18n="l3_row_pasthigh_dur">20 s</td></tr>
+          <tr><td data-i18n="l3_row_uht">Stérilisation UHT</td><td>132–140°C</td><td data-i18n="l3_row_uht_dur">1–3 s</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="section-title" data-i18n="l3_flow_title">Étapes de fabrication (cliquez sur chaque étape pour les détails)</div>
+  <div class="flow" id="flowContainer">
+
+    <div class="flow-step" onclick="toggleFlow(this)">
+      <div class="flow-left"><div class="flow-num" style="background:var(--blue-mid);">1</div><div class="flow-line"></div></div>
+      <div class="flow-body">
+        <div class="flow-meta"><div class="flow-step-title" data-i18n="l3_f1_title">La Reconstitution</div><div class="flow-toggle"><span data-i18n="fl_details">Détails</span><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></div></div>
+        <div class="flow-step-detail" data-i18n="l3_f1_detail">Mélange des poudres de lait (écrémé + entier) avec de l'eau chauffée à 45°C. L'eau est pompée vers le mélangeur où les poudres sont versées en circuit fermé jusqu'à dissolution complète. La température de 45°C facilite la dissolution de la poudre sans formation de grumeaux.
+          <div style="margin-top:0.5rem;display:flex;gap:0.4rem;flex-wrap:wrap;"><span class="pill pill-blue" data-i18n="l3_f1_pill1">Eau traitée</span><span class="pill pill-blue">45°C</span><span class="pill pill-blue" data-i18n="l3_f1_pill2">Circuit fermé</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="flow-step" onclick="toggleFlow(this)">
+      <div class="flow-left"><div class="flow-num" style="background:var(--teal);">2</div><div class="flow-line"></div></div>
+      <div class="flow-body">
+        <div class="flow-meta"><div class="flow-step-title" data-i18n="l3_f2_title">La Filtration</div><div class="flow-toggle"><span data-i18n="fl_details">Détails</span><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></div></div>
+        <div class="flow-step-detail" data-i18n="l3_f2_detail">Passage du lait à travers un filtre sous pression pour éliminer les impuretés physiques présentes dans la poudre de lait (particules non dissoutes, corps étrangers). Une étape indispensable pour garantir la pureté du produit final.</div>
+      </div>
+    </div>
+
+    <div class="flow-step" onclick="toggleFlow(this)">
+      <div class="flow-left"><div class="flow-num" style="background:var(--amber);">3</div><div class="flow-line"></div></div>
+      <div class="flow-body">
+        <div class="flow-meta"><div class="flow-step-title" data-i18n="l3_f3_title">Le Dégazage</div><div class="flow-toggle"><span data-i18n="fl_details">Détails</span><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></div></div>
+        <div class="flow-step-detail" data-i18n="l3_f3_detail">Élimination des gaz dissous (CO₂, O₂, N₂) à 40–45°C. Ces gaz oxydent la matière grasse et altèrent la qualité du lait. Cela évite le phénomène d'« oxydation » qui produit un goût rance.
+          <div style="margin-top:0.5rem;display:flex;gap:0.4rem;flex-wrap:wrap;"><span class="pill pill-amber">CO₂</span><span class="pill pill-amber">O₂</span><span class="pill pill-amber">N₂</span><span class="pill pill-amber">40–45°C</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="flow-step" onclick="toggleFlow(this)">
+      <div class="flow-left"><div class="flow-num" style="background:var(--purple);">4</div><div class="flow-line"></div></div>
+      <div class="flow-body">
+        <div class="flow-meta"><div class="flow-step-title" data-i18n="l3_f4_title">L'Homogénéisation</div><div class="flow-toggle"><span data-i18n="fl_details">Détails</span><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></div></div>
+        <div class="flow-step-detail" data-i18n="l3_f4_detail">Traitement physique à haute pression qui fractionne les globules gras en particules fines et homogènes. Avantage : empêche la remontée de la crème en surface, protège de l'oxydation et améliore la texture.</div>
+      </div>
+    </div>
+
+    <div class="flow-step" onclick="toggleFlow(this)">
+      <div class="flow-left"><div class="flow-num" style="background:var(--blue-mid);">5</div><div class="flow-line"></div></div>
+      <div class="flow-body">
+        <div class="flow-meta"><div class="flow-step-title" data-i18n="l3_f5_title">Refroidissement et stockage tampon</div><div class="flow-toggle"><span data-i18n="fl_details">Détails</span><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></div></div>
+        <div class="flow-step-detail" data-i18n="l3_f5_detail">Refroidissement du lait reconstitué à 4–8°C et stockage dans des cuves de 30 000 litres. C'est ici qu'est réalisé le contrôle physico-chimique pour vérifier la conformité du produit aux normes avant son envoi vers la pasteurisation.</div>
+      </div>
+    </div>
+
+    <div class="flow-step" onclick="toggleFlow(this)">
+      <div class="flow-left"><div class="flow-num" style="background:var(--teal);">6</div><div class="flow-line"></div></div>
+      <div class="flow-body">
+        <div class="flow-meta"><div class="flow-step-title" data-i18n="l3_f6_title">La Pasteurisation</div><div class="flow-toggle"><span data-i18n="fl_details">Détails</span><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></div></div>
+        <div class="flow-step-detail" data-i18n="l3_f6_detail">Traitement thermique qui détruit partiellement la flore microbienne : <strong>Pasteurisation basse</strong> : 63°C pendant 30 minutes (discontinue) / <strong>Pasteurisation haute</strong> : 80–85°C pendant 20 secondes (HTST). Le lait est ensuite refroidi à nouveau à 8–15°C avant la stérilisation.</div>
+      </div>
+    </div>
+
+    <div class="flow-step" onclick="toggleFlow(this)">
+      <div class="flow-left"><div class="flow-num" style="background:var(--red);">7</div><div class="flow-line"></div></div>
+      <div class="flow-body">
+        <div class="flow-meta"><div class="flow-step-title" data-i18n="l3_f7_title">La Stérilisation UHT</div><div class="flow-toggle"><span data-i18n="fl_details">Détails</span><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></div></div>
+        <div class="flow-step-detail">
+          <div class="alert alert-red" style="margin-bottom:0.5rem;">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg>
+            <div data-i18n="l3_f7_alert">135–140°C pendant seulement 1 à 3 secondes — détruit tous les micro-organismes tout en préservant la valeur nutritive. Le flux continu garantit une stérilisation complète.</div>
+          </div>
+          <span data-i18n="l3_f7_after">Il est ensuite immédiatement refroidi à 26°C avant le conditionnement aseptique.</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="flow-step" onclick="toggleFlow(this)">
+      <div class="flow-left"><div class="flow-num" style="background:var(--green);">8</div><div class="flow-line"></div></div>
+      <div class="flow-body">
+        <div class="flow-meta"><div class="flow-step-title" data-i18n="l3_f8_title">Le Conditionnement aseptique</div><div class="flow-toggle"><span data-i18n="fl_details">Détails</span><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></div></div>
+        <div class="flow-step-detail" data-i18n="l3_f8_detail">Dans des emballages stérilisés par rayons UV. Étapes : mise en place de l'emballage → remplissage → datation → pose du bouchon → filmage (Sufilmeuse). Réalisé dans des conditions d'asepsie strictes à l'aide de machines spécialisées.
+          <div style="margin-top:0.5rem;display:flex;gap:0.4rem;flex-wrap:wrap;"><span class="pill pill-green" data-i18n="l3_f8_pill1">Rayons UV</span><span class="pill pill-green" data-i18n="l3_f8_pill2">Conditions aseptiques</span><span class="pill pill-green" data-i18n="l3_f8_pill3">Conservation 3 mois</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="flow-step" onclick="toggleFlow(this)">
+      <div class="flow-left"><div class="flow-num" style="background:var(--text-muted);">9</div></div>
+      <div class="flow-body">
+        <div class="flow-meta"><div class="flow-step-title" data-i18n="l3_f9_title">Nettoyage et Désinfection</div><div class="flow-toggle"><span data-i18n="fl_details">Détails</span><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></div></div>
+        <div class="flow-step-detail" data-i18n="l3_f9_detail">Procédures obligatoires après chaque cycle de production : <strong>Nettoyage :</strong> élimination des salissures et des dépôts sur les surfaces des tuyaux et des cuves. <strong>Désinfection :</strong> destruction des micro-organismes et inactivation des virus à l'aide de produits chimiques spécifiques.</div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="mark-done-row">
+    <button class="mark-done-btn" id="done-s3" onclick="toggleDone('s3')">
+      <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+      <span data-i18n="mark_done">Marquer comme terminé</span>
+    </button>
+  </div>
+</section>
+
+<!-- ═══════════════ REVISION MODE ═══════════════ -->
+<section class="section" id="revision">
+  <div class="lesson-header">
+    <div class="lesson-icon" style="background:linear-gradient(145deg,var(--teal),var(--blue-mid));display:grid;place-items:center;color:#fff;font-size:1.8rem;">↻</div>
+    <div class="lesson-header-text"><h2 data-i18n="revision_title">Mode Révision</h2><p data-i18n="revision_subtitle">Retournez les cartes, marquez vos acquis et concentrez votre effort sur les notions à revoir.</p></div>
+  </div>
+  <div class="search-shell">
+    <input class="search-input" id="courseSearch" type="search" data-i18n-placeholder="search_placeholder" placeholder="Rechercher dans le cours…" oninput="searchCourse(this.value)" aria-label="Rechercher dans le cours">
+    <button class="btn btn-primary" onclick="shuffleFlashcards()" data-i18n="revision_shuffle">Mélanger</button>
+  </div>
+  <div id="searchResults" class="search-results" aria-live="polite"></div>
+  <div class="revision-layout">
+    <div>
+      <div class="flashcard-scene" onclick="flipFlashcard()" role="button" tabindex="0" aria-label="Retourner la carte">
+        <div class="flashcard" id="flashcard">
+          <div class="flash-face flash-front"><div class="flash-kicker" id="flashCount">Carte 1 / 15</div><div class="flash-question" id="flashQuestion"></div><div style="margin-top:1.2rem;font-size:.75rem;opacity:.72;" data-i18n="revision_flip_hint">Cliquez pour révéler la réponse</div></div>
+          <div class="flash-face flash-back"><div class="flash-kicker" data-i18n="revision_answer">Réponse</div><div class="flash-answer" id="flashAnswer"></div><div style="margin-top:1.2rem;font-size:.75rem;color:var(--text-muted);" data-i18n="revision_flip_back">Cliquez pour retourner</div></div>
+        </div>
+      </div>
+      <div class="flash-controls">
+        <button class="btn btn-outline" onclick="previousFlashcard()" data-i18n="revision_previous">Précédente</button>
+        <button class="btn btn-outline" id="flashImportantBtn" onclick="toggleFlashImportant()" data-i18n="revision_important">☆ Important</button>
+        <button class="btn btn-outline" onclick="nextFlashcard()" data-i18n="revision_next">Suivante</button>
+        <button class="btn btn-primary" onclick="markFlashcard(false)" data-i18n="revision_unknown">Je ne savais pas</button>
+        <button class="btn" style="background:var(--green);color:#fff;" onclick="markFlashcard(true)" data-i18n="revision_known">Je savais</button>
+      </div>
+    </div>
+    <div class="dashboard-card">
+      <h3 data-i18n="revision_deck_title">Votre paquet</h3>
+      <div class="flash-list" id="flashList"></div>
+      <p class="dashboard-subtitle" id="flashWeakCount">0 notion à revoir</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ PRACTICE MODE ═══════════════ -->
+<section class="section" id="practice">
+  <div class="lesson-header">
+    <div class="lesson-icon" style="background:linear-gradient(145deg,var(--purple),var(--blue-mid));display:grid;place-items:center;color:#fff;font-size:1.8rem;">✦</div>
+    <div class="lesson-header-text"><h2 data-i18n="practice_title">Entraînement</h2><p data-i18n="practice_subtitle">Des exercices courts pour appliquer le contenu des trois leçons avant l'épreuve officielle.</p></div>
+  </div>
+  <div class="difficulty-row" role="tablist" aria-label="Niveau de difficulté">
+    <button class="difficulty active" onclick="setPracticeDifficulty('easy',this)" data-i18n="difficulty_easy">🟢 Facile</button>
+    <button class="difficulty" onclick="setPracticeDifficulty('medium',this)" data-i18n="difficulty_medium">🟡 Intermédiaire</button>
+    <button class="difficulty" onclick="setPracticeDifficulty('hard',this)" data-i18n="difficulty_hard">🔴 Difficile</button>
+  </div>
+  <div class="dashboard-card practice-card">
+    <div class="eyebrow" data-i18n="practice_label">QUESTION D'APPLICATION</div>
+    <h3 id="practiceQuestion">Que signifie une hausse du point de congélation du lait ?</h3>
+    <div class="practice-options" id="practiceOptions"></div>
+    <div id="practiceFeedback" class="exam-feedback" style="display:none;" aria-live="polite"></div>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-top:1rem;gap:.7rem;flex-wrap:wrap;">
+      <span class="dashboard-subtitle" id="practiceScore">0 réponse validée</span>
+      <button class="btn btn-primary" onclick="nextPracticeQuestion()" data-i18n="practice_next">Question suivante</button>
+    </div>
+  </div>
+  <div class="dashboard-card" style="margin-top:1.2rem;">
+    <div class="eyebrow" data-i18n="case_label">SITUATION DE LABORATOIRE</div>
+    <h3 data-i18n="case_title">Cas pratique — interpréter un échantillon</h3>
+    <p class="dashboard-subtitle" data-i18n="case_intro">Vous travaillez dans un laboratoire de contrôle du lait. Comparez cet échantillon aux valeurs indiquées dans la leçon 1.</p>
+    <div class="case-grid">
+      <div class="case-value"><strong>6.6</strong><span>pH</span></div>
+      <div class="case-value"><strong>16°D</strong><span data-i18n="case_acidity">Acidité</span></div>
+      <div class="case-value"><strong>1.032</strong><span data-i18n="case_density">Densité</span></div>
+      <div class="case-value"><strong>−0.53°C</strong><span data-i18n="case_freezing">Point de congélation</span></div>
+    </div>
+    <div class="practice-options" id="caseOptions"></div>
+    <div id="caseFeedback" class="exam-feedback" style="display:none;" aria-live="polite"></div>
+  </div>
+</section>
+
+<!-- ═══════════════ QUIZ SECTION ═══════════════ -->
+<section class="section" id="quiz">
+
+  <div class="exam-bar">
+    <button class="exam-exit-btn" onclick="requestExitExam()" aria-label="Quitter">
+      <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+    </button>
+    <div class="exam-progress-wrap">
+      <div class="exam-progress-label"><span id="examQLabel">Question 1 / 4</span></div>
+      <div class="exam-progress-bg"><div class="exam-progress-fill" id="examProgressFill" style="width:25%;"></div></div>
+    </div>
+    <div class="exam-timer">
+      <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+      <span id="examTimer">00:00</span>
+    </div>
+  </div>
+
+  <div class="quiz-lesson-header lesson-header">
+    <div class="lesson-icon"><img src="https://images.pexels.com/photos/6684209/pexels-photo-6684209.jpeg?auto=compress&cs=tinysrgb&w=300" alt="" loading="lazy" onerror="this.style.opacity=0"></div>
+    <div class="lesson-header-text">
+      <h2 data-i18n="quiz_title">Testez-vous</h2>
+      <p data-i18n="quiz_subtitle">Épreuve officielle — 4 questions, 20 points — votre objectif : 10/20</p>
+    </div>
+  </div>
+
+  <!-- INTRO / START SCREEN -->
+  <div class="quiz-intro-wrap" id="quizIntro">
+    <div class="quiz-intro-card">
+      <div class="quiz-intro-photo"><img src="https://images.pexels.com/photos/6684209/pexels-photo-6684209.jpeg?auto=compress&cs=tinysrgb&w=800" alt="" loading="lazy" onerror="this.style.display='none'"></div>
+      <div class="quiz-intro-body">
+        <h2 data-i18n="quiz_intro_h2">Prêt(e) à passer le test ?</h2>
+        <p data-i18n="quiz_intro_p">Une épreuve officielle en plein écran, sans distraction, fondée sur les notions des trois leçons.</p>
+        <div id="quizBestScoreWrap" style="display:none;">
+          <div class="quiz-best-score">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8M12 17v4M7 4h10v4a5 5 0 0 1-10 0V4z"/><path d="M7 5H4a1 1 0 0 0-1 1c0 2.5 1.5 4.5 4 5M17 5h3a1 1 0 0 1 1 1c0 2.5-1.5 4.5-4 5"/></svg>
+            <span id="quizBestScoreText"></span>
+          </div>
+        </div>
+        <div class="exam-summary">
+          <div class="metric"><div class="metric-value">20</div><span class="metric-label" data-i18n="quiz_meta_points">Points</span></div>
+          <div class="metric"><div class="metric-value">4</div><span class="metric-label" data-i18n="quiz_meta_questions">Questions</span></div>
+          <div class="metric"><div class="metric-value">~15 min</div><span class="metric-label" data-i18n="quiz_meta_duration">Durée estimée</span></div>
+          <div class="metric"><div class="metric-value">10/20</div><span class="metric-label" data-i18n="quiz_meta_target">Objectif de réussite</span></div>
+        </div>
+        <div class="official-tag" style="margin-bottom:1rem;" data-i18n="quiz_official_tag">Épreuve officielle · 4 questions fixes</div>
+        <button class="btn btn-primary" style="padding:0.85rem 2rem;font-size:0.95rem;" onclick="startExam()">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          <span data-i18n="quiz_start_btn">Commencer le test</span>
+        </button>
+        <div style="margin-top:0.8rem;font-size:0.72rem;color:var(--text-muted);" data-i18n="quiz_kbd_hint">Astuce : utilisez les touches 1 à 4 pour répondre pendant le test.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- QUESTION / RESULTS BODY (shown only in exam mode) -->
+  <div class="quiz-body-wrap" id="quizBodyWrap" style="display:none;">
+    <div id="quizQuestionArea"></div>
+    <div id="quizResultsArea" style="display:none;"></div>
+  </div>
+
+</section>
+
+<div class="toast-region" id="toastRegion" aria-live="polite" aria-atomic="true"></div>
+
+<div class="bottom-nav" aria-label="Navigation rapide">
+  <button class="active" data-bottom-section="dashboard" onclick="showSection('dashboard',this)"><span>⌂</span><span data-i18n="nav_dashboard">Accueil</span></button>
+  <button data-bottom-section="s1" onclick="showSection('s1',this)"><span>01</span><span data-i18n="nav_l1">Leçon 1</span></button>
+  <button data-bottom-section="revision" onclick="showSection('revision',this)"><span>↻</span><span data-i18n="nav_revision">Révision</span></button>
+  <button data-bottom-section="practice" onclick="showSection('practice',this)"><span>✦</span><span data-i18n="nav_practice">Entraînement</span></button>
+  <button data-bottom-section="quiz" onclick="showSection('quiz',this)"><span>✓</span><span data-i18n="nav_quiz">Épreuve</span></button>
+</div>
+
+<footer data-i18n="footer_text">INSFP Bousaâda — Spécialité Contrôle de la Qualité — Niveau 5 | Contrôle du Lait</footer>
+
+<!-- EXIT CONFIRM MODAL -->
+<div class="modal-overlay" id="exitModal">
+  <div class="modal-card">
+    <h3 data-i18n="modal_exit_title">Quitter le test ?</h3>
+    <p data-i18n="modal_exit_body">Votre progression dans ce test sera perdue.</p>
+    <div class="modal-actions">
+      <button class="btn btn-outline" onclick="closeExitModal()" data-i18n="modal_cancel">Annuler</button>
+      <button class="btn btn-primary" style="background:var(--red);" onclick="confirmExitExam()" data-i18n="modal_confirm_exit">Quitter</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ============ TRANSLATIONS  [fr, ar] ============ */
+const T = {
+  page_title: ["Contrôle du Lait — INSFP Bousaâda", "مراقبة الحليب — INSFP بوسعادة"],
+  nav_brand: ["Contrôle du Lait", "مراقبة الحليب"],
+  nav_l1: ["Leçon 1", "الدرس 1"],
+  nav_l2: ["Leçon 2", "الدرس 2"],
+  nav_l3: ["Leçon 3", "الدرس 3"],
+  nav_quiz: ["Testez-vous", "اختبر نفسك"],
+  nav_dashboard: ["Accueil", "الرئيسية"],
+  nav_revision: ["Révision", "مراجعة"],
+  nav_practice: ["Entraînement", "تدريب"],
+  hero_label: ["INSFP Bousaâda — Niveau 5", "INSFP بوسعادة — المستوى 5"],
+  hero_h1: ["Contrôle du Lait", "مراقبة الحليب"],
+  hero_tagline: ["Spécialité Contrôle de la Qualité — résumé interactif complet des trois leçons", "تخصص مراقبة الجودة — ملخص تفاعلي شامل للدروس الثلاثة"],
+  hero_progress_label: ["Progression du cours", "التقدم في الدورة"],
+  hero_stat_lessons: ["Leçons", "دروس"],
+  hero_stat_ph: ["Acidité normale du lait", "حموضة الحليب الطبيعية"],
+  hero_stat_uht: ["Température de stérilisation UHT", "حرارة تعقيم UHT"],
+  hero_btn_pdf: ["Télécharger le résumé (PDF)", "تحميل الملخص (PDF)"],
+  hero_btn_quiz: ["Passer le test", "بدء الاختبار"],
+
+  mark_done: ["Marquer comme terminé", "وضع علامة إتمام"],
+  mark_done_active: ["Terminé ✓", "تم ✓"],
+  fl_details: ["Détails", "التفاصيل"],
+
+  /* ---- Lesson 1 ---- */
+  l1_title: ["Leçon 1 — Propriétés physico-chimiques du lait", "الدرس 1 — الخصائص الفيزيائية والكيميائية للحليب"],
+  l1_subtitle: ["Objectif : connaître les propriétés physiques et chimiques du lait et leur importance dans le contrôle de la qualité", "الهدف: التعرف على الخصائص الفيزيائية والكيميائية للحليب وأهميتها في مراقبة الجودة"],
+  l1_sec1_title: ["I. Propriétés physiques", "أولاً: الخصائص الفيزيائية"],
+  l1_alert1: ["Les propriétés physiques dépendent de tous les composants du lait : eau, matières grasses, protéines et lactose. Des propriétés comme la densité, l'acidité et le point de congélation sont des indicateurs directs de la qualité du lait.", "تعتمد الخصائص الفيزيائية على جميع مكونات الحليب: الماء، الدهون، البروتينات، واللاكتوز. تكون الخصائص كالكثافة والحموضة ونقطة التجمد مؤشرات مباشرة لجودة الحليب."],
+  l1_table1_title: ["Tableau des propriétés physiques", "جدول الخصائص الفيزيائية"],
+  l1_th_prop: ["Propriété", "الخاصية"],
+  l1_th_norm: ["Norme / valeur standard", "المعيار القياسي"],
+  l1_row_ph: ["pH", "pH"],
+  l1_row_acid: ["Acidité titrable", "الحموضة القابلة للقياس"],
+  l1_row_acid_val: ["15 – 17° D (Dornic)", "15 – 17° D (دورنيك)"],
+  l1_row_dens: ["Densité à 20°C", "الكثافة عند 20°C"],
+  l1_row_freeze: ["Point de congélation", "نقطة التجمد"],
+  l1_row_boil: ["Point d'ébullition", "نقطة الغليان"],
+  l1_expl_title: ["Explication des propriétés", "شرح الخصائص"],
+  l1_expl_ph: ["<strong>pH :</strong> le lait frais est proche de la neutralité (6,5–6,7). Toute baisse vers l'acidité affecte la stabilité de la caséine et l'équilibre minéral.", "<strong>pH:</strong> الحليب الطازج قريب من الحياد (6.5–6.7). أي انخفاض نحو الحموضة يؤثر على استقرار الكازين والتوازن المعدني."],
+  l1_expl_acid: ["<strong>Acidité :</strong> exprimée en degrés Dornic (décigramme d'acide lactique par litre). L'acidité naturelle provient des protéines, des phosphates et de l'acide citrique.", "<strong>الحموضة:</strong> تُعبَّر بدرجات دورنيك (ديسيغرام حمض لاكتيك/لتر). الحموضة الطبيعية بسبب البروتينات والفوسفات وحمض الستريك."],
+  l1_expl_dens: ["<strong>Densité :</strong> liée à l'extrait sec — plus la teneur en matière grasse est élevée, plus elle diminue. Elle se mesure au lactodensimètre.", "<strong>الكثافة:</strong> مرتبطة بالمادة الجافة — كلما زادت الدهون كلما انخفضت. تُقاس بلاكتودنسيمتر."],
+  l1_expl_freeze: ["<strong>Point de congélation :</strong> relativement constant (−0,53°C) — toute hausse indique un mouillage (fraude à l'eau).", "<strong>نقطة التجمد:</strong> ثابتة نسبياً (−0.53°C) — أي ارتفاع يدل على غش بالماء."],
+  l1_sec2_title: ["II. Composition chimique du lait", "ثانياً: التركيب الكيميائي للحليب"],
+  l1_chart_title: ["Composition moyenne du lait de vache (g/L)", "متوسط تركيب حليب البقر (g/L)"],
+  l1_comp_water: ["Eau", "الماء"],
+  l1_comp_lactose: ["Lactose (sucre)", "اللاكتوز (سكر)"],
+  l1_comp_fat: ["Matières grasses", "الدهون"],
+  l1_comp_protein: ["Protéines", "البروتينات"],
+  l1_comp_casein: ["Caséine", "الكازين"],
+  l1_comp_salts: ["Sels minéraux", "الأملاح المعدنية"],
+  l1_comp_wheyprot: ["Protéines solubles", "بروتينات سائلة"],
+  l1_chart_caption: ["Extrait sec total : 127 g/L | Extrait sec dégraissé : 92 g/L", "المستخلص الجاف الكلي: 127 g/L | المستخلص الجاف بدون دهون: 92 g/L"],
+  l1_water_title: ["Eau", "الماء"],
+  l1_water_body: ["Il représente <strong>90,5 %</strong> du lait. Présent sous deux formes : eau libre (87,3 %) et eau liée (3,7 %) associée aux protéines.", "يمثل <strong>90.5%</strong> من الحليب. موجود على شكلين: ماء حر (87.3%) وماء مرتبط (3.7%) يرتبط بالبروتينات."],
+  l1_casein_title: ["Caséine", "الكازين"],
+  l1_casein_body: ["La protéine principale (80 % du total des protéines). Présente sous forme de <strong>micelles</strong> colloïdales. Responsable de la couleur blanche du lait.", "البروتين الرئيسي (80% من مجموع البروتينات). موجود على شكل <strong>ميسيلات</strong> غروية. مسؤول عن لون الحليب الأبيض."],
+  l1_lactose_title: ["Lactose", "اللاكتوز"],
+  l1_lactose_body: ["Le seul sucre du lait (un diholoside). Il est fermenté par les bactéries lactiques pour produire de l'<strong>acide lactique</strong>.", "السكر الوحيد في الحليب (ثنائي السكريات). يُخمَّر بواسطة البكتيريا اللاكتيكية ليُنتج <strong>حمض اللاكتيك</strong>."],
+  l1_sec3_title: ["III. Substances chimiques indésirables", "ثالثاً: المواد الكيميائية غير المرغوبة"],
+  l1_sub_antibio: ["<strong>Antibiotiques</strong><br>Résidus des traitements contre les mammites. Risques : allergies, cancer, résistance bactérienne (flore endogène antibiorésistante).", "<strong>المضادات الحيوية</strong><br>بقايا العلاج ضد التهاب الضرع. مخاطرها: الحساسية، السرطان، مقاومة البكتيريا (فلورا داخلية مقاومة للمضادات)."],
+  l1_sub_pest: ["<strong>Pesticides</strong><br>Composés polychlorés liposolubles. Ils s'accumulent dans les réserves graisseuses et sont libérés lors de leur mobilisation.", "<strong>المبيدات الحشرية</strong><br>مركبات متعددة الكلور قابلة للذوبان في الدهون. تتراكم في الاحتياطي الدهني وتُحرَّر عند استخدامه."],
+  l1_sub_metals: ["<strong>Métaux lourds</strong><br>Sélénium, arsenic, plomb, mercure — polluants environnementaux dangereux pour la santé à certains niveaux.", "<strong>المعادن الثقيلة</strong><br>السيلينيوم، الزرنيخ، الرصاص، الزئبق — ملوثات بيئية خطيرة على الصحة عند تجاوز مستويات معينة."],
+
+  /* ---- Lesson 2 ---- */
+  l2_title: ["Leçon 2 — Qualité du lait", "الدرس 2 — جودة الحليب"],
+  l2_subtitle: ["Objectif : connaître les différents aspects de la qualité organoleptique et microbiologique du lait", "الهدف: التعرف على مختلف جوانب جودة الحليب الحسية والميكروبيولوجية"],
+  l2_tab_org: ["Qualité organoleptique", "الجودة الحسية"],
+  l2_tab_micro: ["Qualité microbiologique", "الجودة الميكروبيولوجية"],
+  l2_tab_path: ["Bactéries pathogènes", "البكتيريا المسببة للأمراض"],
+  l2_org_color_title: ["Couleur", "اللون"],
+  l2_org_color_body: ["Le lait est <strong>blanc mat</strong> en raison de la matière grasse qui reflète la lumière. Le lait écrémé présente une légère teinte bleutée due à la caséine. La couleur jaune indique une teneur élevée en carotènes en été.", "الحليب <strong>أبيض مطفأ</strong> بسبب المادة الدهنية التي تعكس الضوء. الحليب الخالي من الدهون له لون أزرق خفيف بسبب الكازين. اللون الأصفر يدل على ارتفاع الكاروتينات في الصيف."],
+  l2_org_color_pill1: ["Blanc mat ✓", "أبيض مطفأ ✓"],
+  l2_org_color_pill2: ["Jaune = été", "أصفر = صيف"],
+  l2_org_smell_title: ["Odeur", "الرائحة"],
+  l2_org_smell_body: ["Odeur caractéristique <strong>liée à la matière grasse</strong> et à l'environnement de traite. Les graisses absorbent les odeurs de l'étable et du fourrage. Lors du stockage, une <strong>odeur acide</strong> apparaît due à la fermentation lactique et à la production d'acide lactique.", "رائحة مميزة <strong>مرتبطة بالمادة الدهنية</strong> ومحيط الحلب. تمتص الدهون روائح الحظيرة والعلف. عند التخزين تظهر <strong>رائحة حامضة</strong> بسبب تخمير البكتيريا اللاكتيكية وإنتاج حمض اللاكتيك."],
+  l2_org_taste_title: ["Goût", "الطعم"],
+  l2_org_taste_body: ["Goût <strong>légèrement sucré</strong> dû au lactose (49 g/L). Aucun goût salé malgré la présence de sels minéraux. La matière grasse apporte onctuosité et rondeur.", "طعم <strong>حلو خفيف</strong> بسبب اللاكتوز (49 g/L). لا يوجد طعم مالح رغم وجود الأملاح المعدنية. الدهون تُضفي نعومة ودسامة."],
+  l2_org_flavor_title: ["Flaveur", "النكهة"],
+  l2_org_flavor_body: ["Un équilibre subtil entre <strong>acides, alcools, esters, amines, composés carbonylés et soufrés</strong>, en interaction avec les matières grasses et protéiques.", "توازن دقيق بين <strong>أحماض، كحولات، إسترات، أمينات، مركبات كربونيلية وكبريتية</strong>، في تفاعل مع المادة الدهنية والبروتينية."],
+  l2_micro_alert: ["Le lait est une denrée très périssable : pH proche de la neutralité + richesse en nutriments = milieu idéal pour la prolifération des micro-organismes (bactéries, levures, moisissures).", "الحليب غذاء سريع التلف: pH قريب من الحياد + غنى بالمغذيات = وسط مثالي لتكاثر الكائنات الدقيقة (بكتيريا، خمائر، عفن)."],
+  l2_flora_orig_title: ["Flore originelle", "الفلورا الأصلية"],
+  l2_flora_orig_sub: ["Moins de 10³ germes/mL dans le lait d'un animal sain", "أقل من 10³ جرثوم/mL في حليب حيوان سليم"],
+  l2_th_organism: ["Micro-organisme", "الكائن الدقيق"],
+  l2_th_pct: ["Proportion %", "النسبة %"],
+  l2_row_gramneg: ["Gram négatif", "جرام سلبي"],
+  l2_flora_orig_note: ["Ces micro-organismes n'altèrent pas la qualité dans des conditions normales.", "هذه الميكروبات لا تؤثر سلبًا على الجودة في الظروف الطبيعية."],
+  l2_flora_contam_title: ["Flore de contamination", "فلورا التلوث"],
+  l2_flora_contam1: ["<strong>Flore d'altération :</strong> coliformes, levures, moisissures — provoquent des défauts organoleptiques et réduisent la durée de conservation.", "<strong>فلورا التلف:</strong> الكوليفورم، الخمائر، العفن — تُسبب عيوبًا حسية وتُقصّر مدة الصلاحية."],
+  l2_flora_contam2: ["<strong>Flore pathogène :</strong> Salmonella, Listeria, staphylocoques — dangereuse pour la santé.", "<strong>الفلورا المسببة للأمراض:</strong> السالمونيلا، اللستيريا، المكورات العنقودية — خطيرة على الصحة."],
+  l2_flora_contam3: ["<strong>Coliformes :</strong> indicateurs de contamination fécale. Ils fermentent le lactose avec production de gaz à 30°C.", "<strong>الكوليفورم:</strong> مؤشر على التلوث البرازي. تُخمِّر اللاكتوز مع إنتاج غاز عند 30°C."],
+  l2_flora_contam4: ["<strong>Levures :</strong> <em>Kluyveromyces lactis, Saccharomyces cerevisiae</em> — provoquent rarement des problèmes.", "<strong>الخمائر:</strong> <em>Kluyveromyces lactis, Saccharomyces cerevisiae</em> — نادرًا ما تُسبب مشاكل."],
+  l2_path_alert: ["La contamination peut être interne (sécrétion de la mamelle) ou externe (troupeaux infectés, eau, homme). Elle comprend les bactéries infectieuses et les bactéries toxinogènes.", "التلوث يكون داخليًا (إفراز الضرع) أو خارجيًا (قطعان مصابة، مياه، إنسان). يشمل البكتيريا المُعدية والبكتيريا المُنتِجة للسموم."],
+  l2_b1_pill: ["Bactérie infectieuse", "بكتيريا معدية"],
+  l2_stat_temp: ["Plage de température", "درجة الحرارة"],
+  l2_stat_opt: ["Optimum de croissance", "الأمثل للنمو"],
+  l2_stat_ph: ["Plage de pH", "نطاق pH"],
+  l2_stat_destroy: ["Destruction par pasteurisation", "التدمير بالبسترة"],
+  l2_stat_destroy_val: ["72°C / 15 secondes", "72°C / 15 ثانية"],
+  l2_b1_note1: ["Aéro-anaérobie facultative — se développe en l'absence d'oxygène. Résistante à la réfrigération et à la congélation, mais détruite par la pasteurisation.", "هوائية لاهوائية اختيارية — تنمو في غياب الأكسجين. مقاومة للتبريد والتجميد لكنها تُدمَّر بالبسترة."],
+  l2_b1_note2: ["Symptômes : diarrhée, vomissements, maux de tête, troubles digestifs après ingestion.", "الأعراض: إسهال، قيء، صداع، اضطرابات هضمية بعد الابتلاع."],
+  l2_b2_pill: ["Bactérie infectieuse — très dangereuse", "بكتيريا معدية — خطيرة جداً"],
+  l2_stat_shape: ["Forme", "الشكل"],
+  l2_stat_shape_val: ["Petits bacilles Gram+", "عصيات صغيرة غرام+"],
+  l2_b2_note: ["<strong>Danger majeur :</strong> elle se développe même au froid (0°C) ! Elle résiste à des conditions extrêmes (chaleur, pH, salinité). Elle est considérée comme un « agent pathogène alimentaire redoutable » en raison de sa large diffusion.", "<strong>الخطر الأكبر:</strong> تنمو حتى في درجات التبريد (0°C)! وهي مقاومة للظروف القاسية (حرارة، pH، ملوحة). تُعتبر «عاملاً مُمرِّضًا غذائيًا خطيرًا» بسبب انتشارها الواسع."],
+  l2_b3_name: ["Bactéries toxinogènes", "البكتيريا المُنتِجة للسموم"],
+  l2_b3_pill: ["Toxines thermorésistantes", "سموم مقاومة للحرارة"],
+  l2_b3_note1: ["Elles produisent une toxine dans l'aliment — détruire la bactérie ne suffit pas ! La toxine reste active même après pasteurisation et stérilisation.", "تُنتج سماً داخل الغذاء — تدمير البكتيريا لا يكفي! يبقى السم فعّالاً حتى بعد البسترة والتعقيم."],
+  l2_b3_note2: ["<em>Staphylococcus aureus</em> : l'exemple le plus marquant — sa toxine résiste à la chaleur (100°C / 30 minutes). Sa source : les éleveurs infectés.", "<em>Staphylococcus aureus</em>: أبرز مثال — سمه مقاوم للحرارة (100°C / 30 دقيقة). مصدره: المربّون المصابون."],
+  l2_b3_note3: ["<em>Clostridium botulinum</em> : toxine botulique — la plus redoutable dans les conserves.", "<em>Clostridium botulinum</em>: السم الوشيقي (البوتولينوم) — الأشد خطورة في المعلبات."],
+
+  /* ---- Lesson 3 ---- */
+  l3_title: ["Leçon 3 — Technologie de fabrication du lait UHT", "الدرس 3 — تقنية صناعة الحليب UHT"],
+  l3_subtitle: ["Objectif : connaître la technologie de fabrication du lait UHT, des matières premières jusqu'au conditionnement final", "الهدف: التعرف على تقنية تصنيع الحليب UHT من المواد الأولية حتى التعبئة النهائية"],
+  l3_alert_def: ["<strong>Définition du lait UHT (Ultra-Haute-Température) :</strong> un lait ayant subi un traitement thermique intense qui détruit tous les micro-organismes tout en préservant la valeur nutritive (sauf une faible quantité de vitamine C). Il se conserve 3 mois en emballage fermé à température ambiante.", "<strong>تعريف الحليب UHT (حرارة فائقة):</strong> حليب خضع لمعالجة حرارية مكثفة تُدمِّر جميع الكائنات الدقيقة مع الحفاظ على القيمة الغذائية (ما عدا كمية قليلة من فيتامين C). يُحفَظ 3 أشهر في عبوة مغلقة بدرجة حرارة الغرفة."],
+  l3_raw_title: ["Matières premières", "المواد الأولية"],
+  l3_raw1: ["<strong>Eau :</strong> eau de ville traitée.", "<strong>الماء:</strong> ماء الشبكة العمومية المعالج."],
+  l3_raw2: ["<strong>Poudre de lait entier (26 %) :</strong> préparée par le procédé SPRAY — élimine 96 à 97 % de l'eau. Solubilité de 99,80 %.", "<strong>مسحوق الحليب كامل الدسم (26%):</strong> مُحضَّر بطريقة SPRAY — يُزيل 96 إلى 97% من الماء. قابلية ذوبان 99.80%."],
+  l3_raw3: ["<strong>Poudre de lait écrémé (0 %) :</strong> utilisée en complément de la poudre entière pour obtenir le taux de matière grasse souhaité.", "<strong>مسحوق الحليب خالي الدسم (0%):</strong> يُستخدم مكمّلاً للمسحوق الكامل للحصول على نسبة الدهون المطلوبة."],
+  l3_compare_title: ["Comparaison des traitements thermiques", "مقارنة المعالجات الحرارية"],
+  l3_th_type: ["Type", "النوع"],
+  l3_th_temp: ["Température", "الحرارة"],
+  l3_th_dur: ["Durée", "المدة"],
+  l3_row_pastlow: ["Pasteurisation basse", "بسترة منخفضة"],
+  l3_row_pastlow_dur: ["30 min", "30 دقيقة"],
+  l3_row_pasthigh: ["Pasteurisation haute", "بسترة عالية"],
+  l3_row_pasthigh_dur: ["20 s", "20 ثانية"],
+  l3_row_uht: ["Stérilisation UHT", "تعقيم UHT"],
+  l3_row_uht_dur: ["1–3 s", "1–3 ثوانٍ"],
+  l3_flow_title: ["Étapes de fabrication (cliquez sur chaque étape pour les détails)", "مراحل التصنيع (انقر على كل مرحلة للتفاصيل)"],
+  l3_f1_title: ["La Reconstitution", "إعادة التكوين"],
+  l3_f1_detail: ["Mélange des poudres de lait (écrémé + entier) avec de l'eau chauffée à 45°C. L'eau est pompée vers le mélangeur où les poudres sont versées en circuit fermé jusqu'à dissolution complète. La température de 45°C facilite la dissolution de la poudre sans formation de grumeaux.", "خلط مساحيق الحليب (خالي الدسم + كامل الدسم) مع الماء المُسخَّن إلى 45°C. تُضخ المياه نحو الخلاط حيث تُصبّ المساحيق في دائرة مغلقة حتى الذوبان الكامل. درجة 45°C تُسهّل ذوبان المسحوق دون تشكّل كُتل."],
+  l3_f1_pill1: ["Eau traitée", "ماء مُعالَج"],
+  l3_f1_pill2: ["Circuit fermé", "دائرة مغلقة"],
+  l3_f2_title: ["La Filtration", "الترشيح"],
+  l3_f2_detail: ["Passage du lait à travers un filtre sous pression pour éliminer les impuretés physiques présentes dans la poudre de lait (particules non dissoutes, corps étrangers). Une étape indispensable pour garantir la pureté du produit final.", "تمرير الحليب عبر مرشح مضغوط للتخلص من الشوائب الفيزيائية الموجودة في مسحوق الحليب (حبيبات غير ذائبة، أجسام غريبة). خطوة ضرورية لضمان نقاء المنتج النهائي."],
+  l3_f3_title: ["Le Dégazage", "نزع الغاز"],
+  l3_f3_detail: ["Élimination des gaz dissous (CO₂, O₂, N₂) à 40–45°C. Ces gaz oxydent la matière grasse et altèrent la qualité du lait. Cela évite le phénomène d'« oxydation » qui produit un goût rance.", "إزالة الغازات الذائبة (CO₂, O₂, N₂) عند 40–45°C. هذه الغازات تُؤكسد المادة الدهنية وتُفسد جودة الحليب. يمنع ذلك ظاهرة «الأكسدة» التي تُنتج طعمًا زنخًا."],
+  l3_f4_title: ["L'Homogénéisation", "التجانس"],
+  l3_f4_detail: ["Traitement physique à haute pression qui fractionne les globules gras en particules fines et homogènes. Avantage : empêche la remontée de la crème en surface, protège de l'oxydation et améliore la texture.", "معالجة فيزيائية بالضغط العالي تُؤدي إلى تفتيت كرات الدهن إلى جسيمات دقيقة ومتجانسة. الفائدة: يمنع صعود القشدة إلى السطح، ويحمي من الأكسدة، ويُحسّن القوام."],
+  l3_f5_title: ["Refroidissement et stockage tampon", "التبريد والتخزين المؤقت"],
+  l3_f5_detail: ["Refroidissement du lait reconstitué à 4–8°C et stockage dans des cuves de 30 000 litres. C'est ici qu'est réalisé le contrôle physico-chimique pour vérifier la conformité du produit aux normes avant son envoi vers la pasteurisation.", "تبريد الحليب المُعاد تكوينه إلى 4–8°C وتخزينه في خزانات سعة 30,000 لتر. يُجرى هنا الفحص الفيزيائي-الكيميائي للتحقق من مطابقة المنتج للمعايير قبل إرساله للبسترة."],
+  l3_f6_title: ["La Pasteurisation", "البسترة"],
+  l3_f6_detail: ["Traitement thermique qui détruit partiellement la flore microbienne : <strong>Pasteurisation basse</strong> : 63°C pendant 30 minutes (discontinue) / <strong>Pasteurisation haute</strong> : 80–85°C pendant 20 secondes (HTST). Le lait est ensuite refroidi à nouveau à 8–15°C avant la stérilisation.", "معالجة حرارية تُدمِّر جزئياً الفلورا الميكروبية: <strong>بسترة منخفضة</strong>: 63°C لمدة 30 دقيقة (متقطعة) / <strong>بسترة عالية</strong>: 80–85°C لمدة 20 ثانية (HTST). يُبرَّد الحليب بعدها مجدداً إلى 8–15°C قبل التعقيم."],
+  l3_f7_title: ["La Stérilisation UHT", "التعقيم UHT"],
+  l3_f7_alert: ["135–140°C pendant seulement 1 à 3 secondes — détruit tous les micro-organismes tout en préservant la valeur nutritive. Le flux continu garantit une stérilisation complète.", "135–140°C لمدة 1–3 ثوانٍ فقط — يُدمِّر جميع الكائنات الدقيقة مع الحفاظ على القيمة الغذائية. التدفق المستمر يضمن تعقيمًا كاملاً."],
+  l3_f7_after: ["Il est ensuite immédiatement refroidi à 26°C avant le conditionnement aseptique.", "يُبرَّد بعدها فوراً إلى 26°C قبل التعبئة المعقمة."],
+  l3_f8_title: ["Le Conditionnement aseptique", "التعبئة المعقمة"],
+  l3_f8_detail: ["Dans des emballages stérilisés par rayons UV. Étapes : mise en place de l'emballage → remplissage → datation → pose du bouchon → filmage (Sufilmeuse). Réalisé dans des conditions d'asepsie strictes à l'aide de machines spécialisées.", "في علب مُعقَّمة بالأشعة فوق البنفسجية. المراحل: وضع العلبة → الملء → التأريخ → وضع السدادة → السِّلَفنة (Sufilmeuse). يتم في ظروف تعقيم صارمة باستخدام آلات متخصصة."],
+  l3_f8_pill1: ["Rayons UV", "أشعة فوق بنفسجية"],
+  l3_f8_pill2: ["Conditions aseptiques", "شروط معقمة"],
+  l3_f8_pill3: ["Conservation 3 mois", "حفظ 3 أشهر"],
+  l3_f9_title: ["Nettoyage et Désinfection", "التنظيف والتطهير"],
+  l3_f9_detail: ["Procédures obligatoires après chaque cycle de production : <strong>Nettoyage :</strong> élimination des salissures et des dépôts sur les surfaces des tuyaux et des cuves. <strong>Désinfection :</strong> destruction des micro-organismes et inactivation des virus à l'aide de produits chimiques spécifiques.", "إجراءات إلزامية بعد كل دورة إنتاج: <strong>التنظيف:</strong> إزالة الأوساخ والرواسب من أسطح الأنابيب والخزانات. <strong>التطهير:</strong> إتلاف الكائنات الدقيقة وتعطيل الفيروسات بمواد كيميائية مخصصة."],
+
+  /* ---- Dashboard / study tools ---- */
+  dashboard_eyebrow: ["PARCOURS INSFP · NIVEAU 5", "مسار INSFP · المستوى 5"],
+  dashboard_title: ["Votre espace d'apprentissage", "مساحة التعلم الخاصة بك"],
+  dashboard_subtitle: ["Reprenez votre progression et consolidez les notions essentielles du contrôle du lait.", "استأنف تقدمك وثبّت المفاهيم الأساسية في مراقبة الحليب."],
+  dashboard_continue: ["Continuer", "متابعة"],
+  dashboard_revision: ["Mode Révision", "وضع المراجعة"],
+  dashboard_next_label: ["PROCHAINE ÉTAPE", "الخطوة التالية"],
+  dashboard_next_title: ["Continuez là où vous vous êtes arrêté", "تابع من حيث توقفت"],
+  dashboard_open_lesson: ["Ouvrir la leçon", "فتح الدرس"],
+  dashboard_progress_title: ["Progression globale", "التقدم الإجمالي"],
+  dashboard_progress_hint: ["Chaque étape validée reste enregistrée sur cet appareil.", "يتم حفظ كل مرحلة مكتملة على هذا الجهاز."],
+  dashboard_stats_title: ["Votre activité", "نشاطك"],
+  dashboard_best: ["Meilleur examen", "أفضل امتحان"],
+  dashboard_last: ["Dernier examen", "آخر امتحان"],
+  dashboard_attempts: ["Tentatives", "المحاولات"],
+  dashboard_streak: ["Jours actifs", "أيام النشاط"],
+  dashboard_journey_title: ["Votre parcours", "مسارك التعليمي"],
+  dashboard_smart_title: ["Révision ciblée", "مراجعة مركزة"],
+  dashboard_no_weakness: ["Pas encore de point faible", "لا توجد نقطة ضعف بعد"],
+  dashboard_smart_hint: ["Passez l'épreuve ou utilisez les cartes pour générer vos premières données.", "أجرِ الامتحان أو استخدم البطاقات لإنشاء بياناتك الأولى."],
+  dashboard_review_weak: ["Réviser ce thème", "مراجعة هذا الموضوع"],
+  dashboard_timer_title: ["Temps d'étude", "وقت الدراسة"],
+  dashboard_timer_hint: ["Une session courte et concentrée.", "جلسة قصيرة ومركزة."],
+  teacher_eyebrow: ["OUTIL OPTIONNEL", "أداة اختيارية"],
+  teacher_title: ["Mode Professeur", "وضع الأستاذ"],
+  teacher_print: ["Imprimer le relevé", "طباعة التقرير"],
+  teacher_hint: ["Préparez un relevé imprimable à partir de la dernière épreuve enregistrée.", "حضّر تقريراً قابلاً للطباعة انطلاقاً من آخر امتحان محفوظ."],
+  teacher_student: ["Étudiant", "الطالب"],
+  teacher_class: ["Classe / groupe", "القسم / المجموعة"],
+  teacher_date: ["Date", "التاريخ"],
+  timer_start: ["Démarrer", "بدء"],
+  timer_pause: ["Pause", "إيقاف مؤقت"],
+  timer_done: ["Session terminée", "انتهت الجلسة"],
+  revision_title: ["Mode Révision", "وضع المراجعة"],
+  revision_subtitle: ["Retournez les cartes, marquez vos acquis et concentrez votre effort sur les notions à revoir.", "اقلب البطاقات، سجّل ما تعرفه وركّز على المفاهيم التي تحتاج إلى مراجعة."],
+  search_placeholder: ["Rechercher dans le cours…", "ابحث في الدورة…"],
+  revision_shuffle: ["Mélanger", "خلط"],
+  revision_flip_hint: ["Cliquez pour révéler la réponse", "انقر لإظهار الإجابة"],
+  revision_answer: ["Réponse", "الإجابة"],
+  revision_flip_back: ["Cliquez pour retourner", "انقر للقلب"],
+  revision_previous: ["Précédente", "السابقة"],
+  revision_next: ["Suivante", "التالية"],
+  revision_important: ["☆ Important", "☆ مهم"],
+  revision_unknown: ["Je ne savais pas", "لم أكن أعرف"],
+  revision_known: ["Je savais", "كنت أعرف"],
+  revision_deck_title: ["Votre paquet", "بطاقاتك"],
+  practice_title: ["Entraînement", "التدريب"],
+  practice_subtitle: ["Des exercices courts pour appliquer le contenu des trois leçons avant l'épreuve officielle.", "تمارين قصيرة لتطبيق محتوى الدروس الثلاثة قبل الامتحان الرسمي."],
+  difficulty_easy: ["🟢 Facile", "🟢 سهل"],
+  difficulty_medium: ["🟡 Intermédiaire", "🟡 متوسط"],
+  difficulty_hard: ["🔴 Difficile", "🔴 صعب"],
+  practice_label: ["QUESTION D'APPLICATION", "سؤال تطبيقي"],
+  practice_next: ["Question suivante", "السؤال التالي"],
+  case_label: ["SITUATION DE LABORATOIRE", "حالة مخبرية"],
+  case_title: ["Cas pratique — interpréter un échantillon", "حالة تطبيقية — تفسير عينة"],
+  case_intro: ["Vous travaillez dans un laboratoire de contrôle du lait. Comparez cet échantillon aux valeurs indiquées dans la leçon 1.", "تعمل في مختبر لمراقبة الحليب. قارن هذه العينة بالقيم المذكورة في الدرس الأول."],
+  case_acidity: ["Acidité", "الحموضة"],
+  case_density: ["Densité", "الكثافة"],
+  case_freezing: ["Point de congélation", "نقطة التجمد"],
+
+  /* ---- Quiz ---- */
+  quiz_title: ["Testez-vous", "اختبر نفسك"],
+  quiz_subtitle: ["Épreuve officielle — 4 questions, 20 points — votre objectif : 10/20", "الامتحان الرسمي — 4 أسئلة، 20 نقطة — هدفك: 10/20"],
+  quiz_intro_h2: ["Prêt(e) à passer le test ?", "هل أنت مستعد(ة) لبدء الاختبار؟"],
+  quiz_intro_p: ["Une épreuve officielle en plein écran, sans distraction, fondée sur les notions des trois leçons.", "امتحان رسمي بملء الشاشة، دون تشتيت، مبني على مفاهيم الدروس الثلاثة."],
+  quiz_meta_points: ["Points", "النقاط"],
+  quiz_meta_questions: ["Questions", "أسئلة"],
+  quiz_meta_duration: ["Durée estimée", "المدة التقديرية"],
+  quiz_meta_target: ["Objectif de réussite", "هدف النجاح"],
+  quiz_official_tag: ["Épreuve officielle · 4 questions fixes", "الامتحان الرسمي · 4 أسئلة ثابتة"],
+  quiz_start_btn: ["Commencer le test", "بدء الاختبار"],
+  quiz_kbd_hint: ["Astuce : utilisez Tab, Entrée et les boutons pour répondre.", "نصيحة: استخدم Tab وEnter والأزرار للإجابة."],
+  quiz_best_score: ["Meilleur score : {n}/20", "أفضل نتيجة: {n}/20"],
+  quiz_q_of: ["Question {a} / {b}", "سؤال {a} من {b}"],
+  quiz_validate: ["Valider la réponse", "تأكيد الإجابة"],
+  quiz_correct: ["Réponse validée", "تم تأكيد الإجابة"],
+  quiz_wrong: ["Réponse à revoir", "إجابة تحتاج إلى مراجعة"],
+  quiz_partial: ["Réponse partiellement correcte", "إجابة صحيحة جزئياً"],
+  quiz_next: ["Suivant", "التالي"],
+  quiz_see_results: ["Voir les résultats", "عرض النتائج"],
+  quiz_next_hint: ["Appuyez sur Entrée pour continuer", "اضغط Enter للمتابعة"],
+  results_pass: ["Examen réussi. Quelques points restent à revoir.", "تم اجتياز الامتحان. بعض النقاط تحتاج إلى مراجعة."],
+  results_mid: ["Examen réussi. Continuez à consolider vos notions.", "تم اجتياز الامتحان. واصل تثبيت مفاهيمك."],
+  results_low: ["Examen non réussi. Révisez les notions indiquées puis retentez l'examen.", "لم ينجح الامتحان. راجع المفاهيم المحددة ثم أعد المحاولة."],
+  results_perfect: ["Excellent ! Maîtrise complète du sujet.", "ممتاز! إتقان كامل للموضوع."],
+  results_time_label: ["Temps : {t}", "الوقت: {t}"],
+  results_retry: ["Recommencer le test", "إعادة الاختبار"],
+  results_back: ["Retour aux leçons", "العودة إلى الدروس"],
+  results_review_errors: ["Revoir mes erreurs", "مراجعة أخطائي"],
+  results_final: ["Résultat final", "النتيجة النهائية"],
+  results_passed: ["✓ EXAMEN RÉUSSI", "✓ تم اجتياز الامتحان"],
+  results_failed: ["À REVOIR", "يحتاج إلى مراجعة"],
+  results_strongest: ["Point fort", "نقطة القوة"],
+  results_weakest: ["Point à revoir", "نقطة تحتاج للمراجعة"],
+  results_mistakes: ["Erreurs", "الأخطاء"],
+  results_points: ["points", "نقاط"],
+  results_review_title: ["Corrigé détaillé", "التصحيح المفصّل"],
+  results_your_answer: ["Votre réponse : {a}", "إجابتك: {a}"],
+  results_correct_answer: ["Réponse correcte : {a}", "الإجابة الصحيحة: {a}"],
+  modal_exit_title: ["Quitter le test ?", "الخروج من الاختبار؟"],
+  modal_exit_body: ["Votre progression dans ce test sera perdue.", "سيتم فقدان تقدمك في هذا الاختبار."],
+  modal_cancel: ["Annuler", "إلغاء"],
+  modal_confirm_exit: ["Quitter", "خروج"],
+  footer_text: ["INSFP Bousaâda — Spécialité Contrôle de la Qualité — Niveau 5 | Contrôle du Lait", "INSFP بوسعادة — تخصص مراقبة الجودة — المستوى 5 | مراقبة الحليب"]
+};
+</script>
+<script>
+/* ============ QUIZ QUESTIONS  (fr / ar) ============ */
+const QUESTIONS = [
+  {
+    id:'chemical', type:'multi', points:4.5, topic:'Substances chimiques indésirables',
+    fr:{q:"Quels sont les composants chimiques indésirables du lait ?", instruction:"Sélectionnez les trois réponses exactes.", options:["Antibiotiques","Pesticides","Métaux","Lactose","Vitamines"], correct:[0,1,2], exp:"Les antibiotiques, les pesticides et les métaux sont les trois composants indésirables retenus par le cours."},
+    ar:{q:"ما هي المكونات الكيميائية غير المرغوب فيها في الحليب؟", instruction:"اختر الإجابات الصحيحة الثلاث.", options:["المضادات الحيوية","المبيدات الحشرية","المعادن","اللاكتوز","الفيتامينات"], correct:[0,1,2], exp:"المضادات الحيوية والمبيدات الحشرية والمعادن هي المكونات غير المرغوب فيها المذكورة في الدرس."}
+  },
+  {
+    id:'composition', type:'build', points:4, topic:'Composition chimique',
+    fr:{q:"Quelle est la composition chimique du lait ?", instruction:"Assemblez les quatre concepts exacts.", options:[
+      {id:'calcium',text:"Richesse en calcium et protéines de qualité."},{id:'lactose',text:"Lactose comme sucre prédominant."},{id:'vitb',text:"Richesse en vitamines, notamment groupe B."},{id:'variation',text:"Varie selon la race, la saison et le climat."},{id:'salt',text:"Le sel est le sucre prédominant."},{id:'zero',text:"La composition est identique toute l'année."}],
+      correct:['calcium','lactose','vitb','variation'], exp:"La composition à retenir associe calcium et protéines de qualité, lactose prédominant, vitamines du groupe B et variations selon la race, la saison et le climat."
+    },
+    ar:{q:"ما هي التركيبة الكيميائية للحليب؟", instruction:"جمّع المفاهيم الأربعة الصحيحة.", options:[
+      {id:'calcium',text:"غني بالكالسيوم والبروتينات عالية الجودة."},{id:'lactose',text:"اللاكتوز هو السكر السائد."},{id:'vitb',text:"غني بالفيتامينات وخاصة مجموعة ب."},{id:'variation',text:"تختلف التركيبة حسب السلالة والموسم والمناخ."},{id:'salt',text:"الملح هو السكر السائد."},{id:'zero',text:"التركيبة ثابتة طوال السنة."}],
+      correct:['calcium','lactose','vitb','variation'], exp:"التركيبة المطلوبة تجمع بين الكالسيوم والبروتينات عالية الجودة، واللاكتوز، وفيتامينات مجموعة ب، وتأثير السلالة والموسم والمناخ."
+    }
+  },
+  {
+    id:'organoleptic', type:'match', points:6, topic:'Qualité organoleptique',
+    fr:{q:"Citer et définir les différents critères de la qualité organoleptique du lait.", instruction:"Cliquez sur un critère, puis sur sa définition correspondante.", left:["La couleur","L'odeur","La saveur","La flaveur"], right:[
+      "Légèrement sucrée due au lactose.","Équilibre entre multiples composés (acides, alcools, etc.) en interaction avec les lipides et protéines.","Blanc mat, due principalement à la matière grasse.","Liée à la matière grasse, l'animal, la traite et l'alimentation. Devient aigre par acidification lactique."
+    ], correct:[2,3,0,1], exp:"Les quatre critères sont la couleur, l'odeur, la saveur et la flaveur. Chaque définition précise le lien avec les composants et les conditions du lait."
+    },
+    ar:{q:"اذكر واشرح مختلف معايير الجودة الحسية للحليب.", instruction:"انقر على معيار ثم على تعريفه المطابق.", left:["اللون","الرائحة","المذاق","النكهة"], right:[
+      "حلوة قليلاً بسبب اللاكتوز.","توازن بين مركبات متعددة (أحماض، كحولات وغيرها) بتفاعل مع الدهون والبروتينات.","أبيض مطفأ، ويرجع أساساً إلى المادة الدهنية.","مرتبطة بالمادة الدهنية والحيوان والحلب والتغذية. تصبح حامضة بسبب التحمض اللبني."
+    ], correct:[2,3,0,1], exp:"المعايير الأربعة هي اللون والرائحة والمذاق والنكهة، ولكل منها تعريفه المرتبط بمكونات الحليب وظروفه."
+    }
+  },
+  {
+    id:'acidity', type:'lab', points:5.5, topic:'Acidité titrable',
+    fr:{q:"Décrire la méthode d'analyse de l'acidité titrable du lait.", instruction:"Ordonnez la procédure, complétez l'équation, puis choisissez l'unité Dornic.", steps:["Prendre l'échantillon de lait","Ajouter la phénolphtaléine","Titrer avec NaOH 1/9N","Ajouter la soude progressivement","Observer le changement de couleur","S'arrêter au rose pâle","Reconnaître le point de neutralisation","Exprimer le résultat en °D"], equation:["CH₃-CHOH-COOH","+","NaOH","→","CH₃-CHOH-COONa","+","H₂O"], dornic:["1°D = 0,1 g d'acide lactique / L de lait","1°D = 1 g d'acide lactique / L de lait","1°D = 0,01 g d'acide lactique / L de lait"], correctDornic:0, exp:"L'acide lactique est titré par la soude NaOH 1/9N en présence de phénolphtaléine. La neutralisation est repérée par un rose pâle. 1°D représente 0,1 g d'acide lactique par litre."
+    },
+    ar:{q:"اشرح طريقة تحليل الحموضة القابلة للمعايرة للحليب.", instruction:"رتّب المراحل، أكمل المعادلة، ثم اختر وحدة دورنيك.", steps:["أخذ عينة الحليب","إضافة الفينول فثالين","المعايرة بـ NaOH 1/9N","إضافة الصودا تدريجياً","ملاحظة تغير اللون","التوقف عند اللون الوردي الفاتح","التعرف على نقطة التعادل","التعبير عن النتيجة بـ °D"], equation:["CH₃-CHOH-COOH","+","NaOH","→","CH₃-CHOH-COONa","+","H₂O"], dornic:["1°D = 0.1 g حمض لاكتيك / L حليب","1°D = 1 g حمض لاكتيك / L حليب","1°D = 0.01 g حمض لاكتيك / L حليب"], correctDornic:0, exp:"تتم معايرة حمض اللاكتيك بالصودا NaOH 1/9N بوجود الفينول فثالين. يظهر التعادل عند اللون الوردي الفاتح. تمثل 1°D مقدار 0.1 g من حمض اللاكتيك لكل لتر."
+    }
+  }
+];
+
+/* ============ STATE & STORAGE ============ */
+let currentLang = 'fr';
+let currentQ = 0, quizScore = 0, userAnswers = [], answered = false;
+let examTimerHandle = null, examSeconds = 0;
+let examDraft = {}, examResponses = [], studyTimerHandle = null, studySeconds = 25 * 60;
+let flashIndex = 0, flashFlipped = false, practiceDifficulty = 'easy', practiceIndex = 0;
+let practiceValidated = false;
+
+const FLASHCARDS = [
+  {term:'pH', fr:'Quelle est la plage normale du pH du lait ?', ar:'ما هو نطاق pH الطبيعي للحليب؟', answer:'6.5 – 6.7'},
+  {term:'Acidité Dornic', fr:'Quelle unité exprime l’acidité titrable ?', ar:'ما هي الوحدة التي تعبّر عن الحموضة القابلة للمعايرة؟', answer:'Le degré Dornic (°D).'},
+  {term:'Densité', fr:'Quelle est la densité du lait à 20°C ?', ar:'ما هي كثافة الحليب عند 20°C؟', answer:'1.028 – 1.036.'},
+  {term:'Point de congélation', fr:'Quelle valeur est proche de la normale ?', ar:'ما هي القيمة القريبة من الطبيعي لنقطة التجمد؟', answer:'−0.51°C à −0.55°C.'},
+  {term:'Eau', fr:'Quel composant représente environ 90,5 % du lait ?', ar:'ما المكوّن الذي يمثل حوالي 90.5% من الحليب؟', answer:'L’eau.'},
+  {term:'Lactose', fr:'Quel est le sucre prédominant du lait ?', ar:'ما هو السكر السائد في الحليب؟', answer:'Le lactose.'},
+  {term:'Caséine', fr:'Quelle est la protéine principale du lait ?', ar:'ما هو البروتين الرئيسي في الحليب؟', answer:'La caséine, sous forme de micelles.'},
+  {term:'Antibiotiques', fr:'Citez une substance chimique indésirable.', ar:'اذكر مادة كيميائية غير مرغوب فيها.', answer:'Antibiotiques, pesticides ou métaux.'},
+  {term:'Couleur', fr:'Comment est la couleur normale du lait ?', ar:'كيف يكون لون الحليب الطبيعي؟', answer:'Blanc mat, principalement lié à la matière grasse.'},
+  {term:'Odeur', fr:'À quoi l’odeur du lait est-elle liée ?', ar:'بماذا ترتبط رائحة الحليب؟', answer:'À la matière grasse, l’animal, la traite et l’alimentation.'},
+  {term:'Saveur', fr:'Pourquoi la saveur du lait est-elle légèrement sucrée ?', ar:'لماذا مذاق الحليب حلو قليلاً؟', answer:'À cause du lactose.'},
+  {term:'Flaveur', fr:'Que désigne la flaveur ?', ar:'ماذا تعني النكهة؟', answer:'L’équilibre entre plusieurs composés en interaction avec lipides et protéines.'},
+  {term:'Pasteurisation', fr:'Quelle pasteurisation haute est indiquée dans le cours ?', ar:'ما هي البسترة العالية المذكورة في الدرس؟', answer:'80–85°C pendant 20 secondes.'},
+  {term:'Stérilisation UHT', fr:'Quelle température et durée pour l’UHT ?', ar:'ما حرارة ومدة تعقيم UHT؟', answer:'132–140°C pendant 1–3 secondes.'},
+  {term:'Dégazage', fr:'Quel est le but du dégazage ?', ar:'ما هدف نزع الغاز؟', answer:'Éliminer les gaz dissous pour éviter l’oxydation des graisses.'}
+];
+
+function storageGet(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } }
+function storageSet(k,v){ try{ localStorage.setItem(k,v); }catch(e){} }
+
+function applyTheme(theme){
+  document.documentElement.setAttribute('data-theme', theme === 'dark' ? 'dark' : 'light');
+  document.getElementById('themeIconMoon').style.display = theme === 'dark' ? 'none' : 'block';
+  document.getElementById('themeIconSun').style.display = theme === 'dark' ? 'block' : 'none';
+  storageSet('milkControlTheme', theme);
+}
+function toggleTheme(){
+  const current = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+  applyTheme(current === 'dark' ? 'light' : 'dark');
+}
+
+function loadProgress(){
+  try { return JSON.parse(storageGet('milkControlProgress')) || {}; } catch(e){ return {}; }
+}
+function saveProgress(p){ storageSet('milkControlProgress', JSON.stringify(p)); }
+
+/* ============ LANGUAGE ============ */
+function applyLanguage(lang){
+  currentLang = lang;
+  const idx = lang === 'fr' ? 0 : 1;
+  document.documentElement.lang = lang;
+  document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+  document.getElementById('lang-btn-fr').classList.toggle('active', lang==='fr');
+  document.getElementById('lang-btn-ar').classList.toggle('active', lang==='ar');
+  document.querySelectorAll('[data-i18n]').forEach(el=>{
+    const key = el.getAttribute('data-i18n');
+    if (T[key]) el.innerHTML = T[key][idx];
+  });
+  document.querySelectorAll('[data-i18n-placeholder]').forEach(el=>{
+    const key = el.getAttribute('data-i18n-placeholder');
+    if (T[key]) el.setAttribute('placeholder', T[key][idx]);
+  });
+  document.title = T.page_title[idx];
+  storageSet('milkControlLang', lang);
+  if (document.getElementById('quizQuestionArea').innerHTML.trim() !== '' &&
+      document.getElementById('quizResultsArea').style.display === 'none') {
+    renderQuestion();
+  }
+  if (document.getElementById('quizResultsArea').style.display !== 'none' &&
+      document.getElementById('quizResultsArea').innerHTML.trim() !== '') {
+    renderResults();
+  }
+  updateBestScoreDisplay();
+  refreshDashboard();
+  renderFlashcard();
+  renderPracticeQuestion();
+}
+
+/* ============ NAV / SECTIONS ============ */
+function showSection(id, btn){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  const target = document.getElementById(id);
+  if (!target) return;
+  target.classList.add('active');
+  document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
+  const navBtn = document.querySelector('.nav-tab[data-section="'+id+'"]');
+  if (navBtn) navBtn.classList.add('active');
+  document.querySelectorAll('.bottom-nav button').forEach(t=>t.classList.toggle('active', t.dataset.bottomSection === id));
+  if (btn && btn.closest('.bottom-nav')) btn.classList.add('active');
+  storageSet('milkControlLastSection', id);
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+function showPanel(id, btn){
+  const parent = btn.closest('section');
+  parent.querySelectorAll('.sub-panel').forEach(p=>p.classList.remove('active'));
+  parent.querySelectorAll('.sub-tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+}
+
+function toggleBacteria(headerEl){
+  const card = headerEl.closest('.bacteria-card');
+  const body = card.querySelector('.bacteria-body');
+  const isOpen = body.classList.contains('open');
+  card.classList.toggle('open', !isOpen);
+  body.classList.toggle('open', !isOpen);
+}
+
+function toggleFlow(stepEl){
+  stepEl.classList.toggle('open');
+}
+
+/* ============ PROGRESS TRACKING ============ */
+function toggleDone(sectionId){
+  const p = loadProgress();
+  p[sectionId] = !p[sectionId];
+  p.lastLesson = sectionId;
+  p.lastActivity = new Date().toISOString();
+  saveProgress(p);
+  refreshProgressUI();
+  refreshDashboard();
+  showToast(p[sectionId] ? (currentLang === 'fr' ? 'Leçon terminée' : 'تم إنهاء الدرس') : (currentLang === 'fr' ? 'Leçon rouverte' : 'تم فتح الدرس'), p[sectionId] ? 'success' : 'warning');
+}
+
+function refreshProgressUI(){
+  const p = loadProgress();
+  let count = 0;
+  ['s1','s2','s3'].forEach(id=>{
+    const btn = document.getElementById('done-'+id);
+    const tick = document.getElementById('tick-'+id);
+    const done = !!p[id];
+    if (done) count++;
+    if (btn){
+      btn.classList.toggle('done', done);
+      btn.querySelector('span[data-i18n]').setAttribute('data-i18n', done ? 'mark_done_active' : 'mark_done');
+      btn.querySelector('span[data-i18n]').innerHTML = T[done ? 'mark_done_active' : 'mark_done'][currentLang==='fr'?0:1];
+    }
+    if (tick) tick.classList.toggle('hidden', !done);
+  });
+  if (p.quizPassed) count++;
+  document.getElementById('hero-progress-text').textContent = count + '/4';
+  document.getElementById('hero-progress-fill').style.width = (count/4*100) + '%';
+  refreshDashboard();
+}
+
+function updateBestScoreDisplay(){
+  const p = loadProgress();
+  const wrap = document.getElementById('quizBestScoreWrap');
+  if (p.bestScore !== undefined){
+    wrap.style.display = 'block';
+    const idx = currentLang==='fr'?0:1;
+    document.getElementById('quizBestScoreText').textContent = T.quiz_best_score[idx].replace('{n}', p.bestScore);
+  } else { wrap.style.display = 'none'; }
+}
+
+/* ============ DASHBOARD / STUDY TOOLS ============ */
+function showToast(message, tone='success'){
+  const region = document.getElementById('toastRegion');
+  if (!region) return;
+  const toast = document.createElement('div');
+  toast.className = 'toast '+tone;
+  toast.innerHTML = '<span aria-hidden="true">'+(tone === 'warning' ? '!' : '✓')+'</span><span>'+message+'</span>';
+  region.appendChild(toast);
+  setTimeout(()=>toast.remove(), 3200);
+}
+
+function refreshDashboard(){
+  const p = loadProgress();
+  const completed = ['s1','s2','s3'].filter(id=>!!p[id]).length;
+  const progress = Math.round((completed + (p.quizPassed ? 1 : 0)) / 4 * 100);
+  const ring = document.getElementById('dashboardRing');
+  if (ring) ring.style.setProperty('--progress', progress);
+  const progressEl = document.getElementById('dashboardProgress');
+  if (progressEl) progressEl.textContent = progress+'%';
+  const lessonCount = document.getElementById('dashboardLessonCount');
+  if (lessonCount) lessonCount.textContent = completed+'/3 '+(currentLang === 'fr' ? 'leçons' : 'دروس');
+  const best = document.getElementById('dashBest');
+  const last = document.getElementById('dashLast');
+  if (best) best.textContent = p.bestScore !== undefined ? Number(p.bestScore).toFixed(1).replace('.0','')+'/20' : '—';
+  if (last) last.textContent = p.lastScore !== undefined ? Number(p.lastScore).toFixed(1).replace('.0','')+'/20' : '—';
+  const attempts = document.getElementById('dashAttempts');
+  if (attempts) attempts.textContent = p.attempts || 0;
+  const streak = document.getElementById('dashStreak');
+  if (streak) streak.textContent = p.studyDays || 0;
+  const names = currentLang === 'fr'
+    ? {s1:['Leçon 1 — Propriétés du lait','Notions physico-chimiques'],s2:['Leçon 2 — Qualité du lait','Qualité organoleptique et microbiologique'],s3:['Leçon 3 — Technologie UHT','Fabrication et conditionnement']}
+    : {s1:['الدرس 1 — خصائص الحليب','المفاهيم الفيزيائية والكيميائية'],s2:['الدرس 2 — جودة الحليب','الجودة الحسية والميكروبيولوجية'],s3:['الدرس 3 — تقنية UHT','التصنيع والتعبئة']};
+  let next = p.lastLesson && !p[p.lastLesson] ? p.lastLesson : ['s1','s2','s3'].find(id=>!p[id]) || 'quiz';
+  const nextName = document.getElementById('continueName');
+  const nextDetail = document.getElementById('continueDetail');
+  const nextIcon = document.getElementById('continueIcon');
+  if (next === 'quiz'){
+    if (nextName) nextName.textContent = currentLang === 'fr' ? 'Épreuve officielle' : 'الامتحان الرسمي';
+    if (nextDetail) nextDetail.textContent = currentLang === 'fr' ? '4 questions · 20 points' : '4 أسئلة · 20 نقطة';
+    if (nextIcon) nextIcon.textContent = '✓';
+  } else {
+    if (nextName) nextName.textContent = names[next][0];
+    if (nextDetail) nextDetail.textContent = names[next][1];
+    if (nextIcon) nextIcon.textContent = next.slice(1);
+  }
+  const journey = document.getElementById('courseJourney');
+  if (journey){
+    const steps = [
+      {id:'s1',label:currentLang === 'fr' ? 'Leçon 1' : 'الدرس 1'},
+      {id:'s2',label:currentLang === 'fr' ? 'Leçon 2' : 'الدرس 2'},
+      {id:'s3',label:currentLang === 'fr' ? 'Leçon 3' : 'الدرس 3'},
+      {id:'revision',label:currentLang === 'fr' ? 'Révision' : 'مراجعة'},
+      {id:'practice',label:currentLang === 'fr' ? 'Entraînement' : 'تدريب'},
+      {id:'quiz',label:currentLang === 'fr' ? 'Examen' : 'امتحان'}
+    ];
+    journey.innerHTML = steps.map((step,i)=>{
+      const done = step.id.startsWith('s') ? !!p[step.id] : step.id === 'quiz' ? !!p.quizPassed : false;
+      const active = step.id === next || (!p.lastLesson && i === 0);
+      return '<button class="journey-step '+(done?'done ':'')+(active?'active':'')+'" onclick="showSection(\''+step.id+'\',document.querySelector(\'.nav-tab[data-section='+step.id+']\'))"><div class="journey-num">'+(done?'✓':i<3 ? i+1 : '•')+'</div><div class="journey-name">'+step.label+'</div><div class="journey-status">'+(done ? (currentLang === 'fr' ? 'Terminé' : 'مكتمل') : active ? (currentLang === 'fr' ? 'En cours' : 'جارٍ') : (currentLang === 'fr' ? 'À venir' : 'التالي'))+'</div></button>';
+    }).join('');
+  }
+  const stats = p.topicStats || {};
+  const topicEntries = Object.entries(stats);
+  const weakest = topicEntries.sort((a,b)=>a[1].rate-b[1].rate)[0];
+  const weakTopic = document.getElementById('weakTopic');
+  const weakRate = document.getElementById('weakRate');
+  const weakBar = document.getElementById('weakTopicBar');
+  if (weakest){
+    if (weakTopic) weakTopic.textContent = weakest[0];
+    if (weakRate) weakRate.textContent = Math.round(weakest[1].rate)+'%';
+    if (weakBar) weakBar.style.width = Math.round(weakest[1].rate)+'%';
+  } else {
+    if (weakTopic) weakTopic.textContent = currentLang === 'fr' ? 'Pas encore de point faible' : 'لا توجد نقطة ضعف بعد';
+    if (weakRate) weakRate.textContent = '—';
+    if (weakBar) weakBar.style.width = '0';
+  }
+}
+
+function continueLearning(){
+  const p = loadProgress();
+  const next = p.lastLesson && !p[p.lastLesson] ? p.lastLesson : ['s1','s2','s3'].find(id=>!p[id]) || 'quiz';
+  const btn = document.querySelector('.nav-tab[data-section="'+next+'"]');
+  showSection(next, btn);
+  showToast(currentLang === 'fr' ? 'Progression restaurée' : 'تم استرجاع التقدم');
+}
+
+function focusWeakTopic(){
+  const p = loadProgress();
+  const entries = Object.entries(p.topicStats || {}).sort((a,b)=>a[1].rate-b[1].rate);
+  if (!entries.length){ showSection('revision',document.querySelector('[data-section=revision]')); return; }
+  const topic = entries[0][0].toLowerCase();
+  const match = FLASHCARDS.findIndex(card=>card.term.toLowerCase().includes(topic.split(' ')[0]) || topic.includes(card.term.toLowerCase()));
+  flashIndex = match >= 0 ? match : 0;
+  showSection('revision',document.querySelector('[data-section=revision]'));
+  renderFlashcard();
+}
+
+function searchCourse(value){
+  const container = document.getElementById('searchResults');
+  if (!container) return;
+  const query = String(value || '').trim().toLowerCase();
+  if (!query){ container.innerHTML = ''; return; }
+  const records = [
+    ['pH','s1','6.5 – 6.7'],['Dornic','s1','15 – 17°D'],['Lactose','s1','Sucre prédominant'],['Caséine','s1','Protéine principale'],
+    ['Couleur','s2','Blanc mat'],['Odeur','s2','Matière grasse et environnement'],['Flaveur','s2','Acides, alcools, esters'],['Pasteurisation','s3','63°C ou 80–85°C'],
+    ['Stérilisation UHT','s3','132–140°C · 1–3 s'],['Pesticides','s1','Substances indésirables'],['Métaux lourds','s1','Substances indésirables']
+  ];
+  const hits = records.filter(r=>r.join(' ').toLowerCase().includes(query)).slice(0,7);
+  container.innerHTML = hits.length ? hits.map(r=>'<button class="search-result" onclick="jumpToSearchResult(\''+r[1]+'\',\''+r[0]+'\')"><strong>'+r[0]+'</strong><span>'+r[2]+'</span></button>').join('') : '<div class="dashboard-subtitle">'+(currentLang === 'fr' ? 'Aucun résultat dans le cours.' : 'لا توجد نتيجة في الدورة.')+'</div>';
+}
+
+function jumpToSearchResult(sectionId, term){
+  showSection(sectionId,document.querySelector('.nav-tab[data-section="'+sectionId+'"]'));
+  const section = document.getElementById(sectionId);
+  if (!section) return;
+  const walker = document.createTreeWalker(section, NodeFilter.SHOW_ELEMENT);
+  let found = null;
+  while (walker.nextNode()){
+    const node = walker.currentNode;
+    if (node.children.length === 0 && node.textContent.toLowerCase().includes(term.toLowerCase())){ found = node; break; }
+  }
+  if (found){ found.classList.add('highlight-found'); found.scrollIntoView({behavior:'smooth',block:'center'}); setTimeout(()=>found.classList.remove('highlight-found'),1800); }
+}
+
+function readFlashState(){
+  try { return JSON.parse(storageGet('milkControlFlashcards')) || {}; } catch(e){ return {}; }
+}
+function saveFlashState(state){ storageSet('milkControlFlashcards',JSON.stringify(state)); }
+function renderFlashcard(){
+  const card = FLASHCARDS[flashIndex];
+  if (!card) return;
+  const state = readFlashState();
+  const lang = currentLang === 'fr' ? 'fr' : 'ar';
+  const q = document.getElementById('flashQuestion'), a = document.getElementById('flashAnswer');
+  if (q) q.textContent = card[lang];
+  if (a) a.textContent = card.answer;
+  const count = document.getElementById('flashCount');
+  if (count) count.textContent = (currentLang === 'fr' ? 'Carte ' : 'بطاقة ')+(flashIndex+1)+' / '+FLASHCARDS.length;
+  const flash = document.getElementById('flashcard');
+  if (flash) flash.classList.toggle('flipped',flashFlipped);
+  const important = document.getElementById('flashImportantBtn');
+  if (important) important.textContent = state[flashIndex] && state[flashIndex].important ? (currentLang === 'fr' ? '★ Important' : '★ مهم') : (currentLang === 'fr' ? '☆ Important' : '☆ مهم');
+  const list = document.getElementById('flashList');
+  if (list) list.innerHTML = FLASHCARDS.map((item,i)=>'<button class="'+(i===flashIndex?'active':'')+'" onclick="goToFlashcard('+i+')"><strong>'+item.term+'</strong>'+(state[i] && state[i].known ? ' ✓' : '')+(state[i] && state[i].important ? ' ★' : '')+'</button>').join('');
+  const weak = Object.values(state).filter(s=>s && s.known === false).length;
+  const weakCount = document.getElementById('flashWeakCount');
+  if (weakCount) weakCount.textContent = weak+' '+(currentLang === 'fr' ? (weak === 1 ? 'notion à revoir' : 'notions à revoir') : 'مفاهيم تحتاج إلى مراجعة');
+}
+function flipFlashcard(){ flashFlipped = !flashFlipped; renderFlashcard(); }
+function goToFlashcard(index){ flashIndex = index; flashFlipped = false; renderFlashcard(); }
+function nextFlashcard(){ flashIndex = (flashIndex+1)%FLASHCARDS.length; flashFlipped=false; renderFlashcard(); }
+function previousFlashcard(){ flashIndex = (flashIndex-1+FLASHCARDS.length)%FLASHCARDS.length; flashFlipped=false; renderFlashcard(); }
+function shuffleFlashcards(){ flashIndex = Math.floor(Math.random()*FLASHCARDS.length); flashFlipped=false; renderFlashcard(); showToast(currentLang === 'fr' ? 'Paquet mélangé' : 'تم خلط البطاقات'); }
+function toggleFlashImportant(){ const s=readFlashState(); s[flashIndex]=Object.assign({},s[flashIndex],{important:!(s[flashIndex]&&s[flashIndex].important)}); saveFlashState(s); renderFlashcard(); }
+function markFlashcard(known){ const s=readFlashState(); s[flashIndex]=Object.assign({},s[flashIndex],{known}); saveFlashState(s); showToast(known ? (currentLang === 'fr' ? 'Notion maîtrisée' : 'تم إتقان المفهوم') : (currentLang === 'fr' ? 'Ajoutée aux notions à revoir' : 'أضيفت إلى المفاهيم للمراجعة'), known?'success':'warning'); nextFlashcard(); }
+
+const PRACTICE_BANK = {
+  easy:[
+    {fr:"Que signifie une hausse du point de congélation du lait ?",ar:"ماذا يعني ارتفاع نقطة تجمد الحليب؟",opts:["Lait parfaitement normal","Mouillage du lait","Augmentation des protéines","Augmentation du lactose"],correct:1,exp:"Une hausse du point de congélation indique un mouillage du lait."},
+    {fr:"Quel est le sucre prédominant du lait ?",ar:"ما هو السكر السائد في الحليب؟",opts:["Lactose","Sel minéral","Acide lactique","Caséine"],correct:0,exp:"Le lactose est le sucre prédominant du lait."}
+  ],
+  medium:[
+    {fr:"Quel résultat correspond à un lait dans les plages du cours ?",ar:"أي نتيجة توافق القيم المذكورة في الدرس؟",opts:["pH 5.2 · densité 1.010","pH 6.6 · densité 1.032","pH 7.5 · densité 1.050","pH 4.5 · densité 1.000"],correct:1,exp:"pH 6.6 et densité 1.032 se situent dans les plages indiquées."},
+    {fr:"Quelle étape protège le lait UHT de l'oxydation des graisses ?",ar:"ما المرحلة التي تحمي حليب UHT من أكسدة الدهون؟",opts:["Reconstitution","Dégazage","Conditionnement","Nettoyage"],correct:1,exp:"Le dégazage élimine les gaz dissous qui oxydent les matières grasses."}
+  ],
+  hard:[
+    {fr:"Un échantillon est à pH 6.6, 16°D, densité 1.032 et −0.53°C. Quelle lecture est la plus fidèle au cours ?",ar:"عينة pH=6.6 و16°D وكثافة 1.032 ونقطة تجمد −0.53°C. ما التفسير الأدق حسب الدرس؟",opts:["Les quatre valeurs sont dans les plages indiquées","Le pH est trop acide","La densité indique un mouillage","La congélation est anormale"],correct:0,exp:"Les quatre valeurs correspondent aux valeurs et plages fournies dans la leçon 1."}
+  ]
+};
+function setPracticeDifficulty(level,btn){ practiceDifficulty=level; practiceIndex=0; document.querySelectorAll('.difficulty').forEach(b=>b.classList.remove('active')); if(btn) btn.classList.add('active'); renderPracticeQuestion(); }
+function renderPracticeQuestion(){
+  const q = PRACTICE_BANK[practiceDifficulty][practiceIndex % PRACTICE_BANK[practiceDifficulty].length];
+  if (!q) return;
+  const question = document.getElementById('practiceQuestion'), options = document.getElementById('practiceOptions'), fb=document.getElementById('practiceFeedback');
+  if (!question || !options) return;
+  question.textContent = currentLang === 'fr' ? q.fr : q.ar;
+  options.innerHTML = q.opts.map((opt,i)=>'<button class="practice-option" onclick="answerPractice('+i+')" data-practice="'+i+'">'+opt+'</button>').join('');
+  if (fb){ fb.style.display='none'; fb.innerHTML=''; }
+}
+function answerPractice(index){
+  if (practiceValidated) return;
+  practiceValidated=true;
+  const q=PRACTICE_BANK[practiceDifficulty][practiceIndex % PRACTICE_BANK[practiceDifficulty].length];
+  document.querySelectorAll('[data-practice]').forEach((btn,i)=>{ btn.disabled=true; if(i===q.correct) btn.classList.add('correct'); else if(i===index) btn.classList.add('wrong'); });
+  const fb=document.getElementById('practiceFeedback');
+  if (fb){ fb.style.display='block'; fb.className='exam-feedback '+(index===q.correct?'good':'bad'); fb.innerHTML=(index===q.correct?'✓ ':'! ')+(currentLang==='fr'?'Bonne réponse. ':'إجابة صحيحة. ')+q.exp; }
+  const p=loadProgress(); p.practiceCorrect=(p.practiceCorrect||0)+(index===q.correct?1:0); p.practiceAttempts=(p.practiceAttempts||0)+1; saveProgress(p);
+  const score=document.getElementById('practiceScore'); if(score) score.textContent=(p.practiceCorrect||0)+' '+(currentLang==='fr'?'réponse(s) validée(s)':'إجابة مؤكدة');
+}
+function nextPracticeQuestion(){ practiceIndex=(practiceIndex+1)%PRACTICE_BANK[practiceDifficulty].length; practiceValidated=false; renderPracticeQuestion(); }
+function renderCaseStudy(){
+  const opts=document.getElementById('caseOptions'); if(!opts) return;
+  const answers=currentLang==='fr'?["L'échantillon est dans les plages indiquées","Le lait est forcément mouillé","Le lait est impropre selon ces seules valeurs","Le pH est hors norme"]:["العينة ضمن القيم المذكورة","الحليب مغشوش بالماء حتماً","الحليب غير صالح اعتماداً على هذه القيم فقط","pH خارج المعيار"];
+  opts.innerHTML=answers.map((a,i)=>'<button class="practice-option" onclick="answerCase('+i+')" data-case="'+i+'">'+a+'</button>').join('');
+}
+function answerCase(index){ const correct=0; document.querySelectorAll('[data-case]').forEach((b,i)=>{b.disabled=true;if(i===correct)b.classList.add('correct');else if(i===index)b.classList.add('wrong');}); const fb=document.getElementById('caseFeedback'); if(fb){fb.style.display='block';fb.className='exam-feedback '+(index===correct?'good':'bad');fb.textContent=(index===correct?'✓ ':'! ')+(currentLang==='fr'?'Les quatre valeurs sont dans les plages indiquées dans le cours.':'القيم الأربع ضمن النطاقات المذكورة في الدرس.');} }
+
+function setStudyTimer(minutes){ clearInterval(studyTimerHandle); studySeconds=minutes*60; updateStudyTimer(); const btn=document.getElementById('studyTimerBtn'); if(btn) btn.textContent=T.timer_start[currentLang==='fr'?0:1]; }
+function updateStudyTimer(){ const el=document.getElementById('studyTimerDisplay'); if(!el)return; const m=String(Math.floor(studySeconds/60)).padStart(2,'0'),s=String(studySeconds%60).padStart(2,'0'); el.textContent=m+':'+s; }
+function toggleStudyTimer(){ const btn=document.getElementById('studyTimerBtn'); if(studyTimerHandle){clearInterval(studyTimerHandle);studyTimerHandle=null;if(btn)btn.textContent=T.timer_start[currentLang==='fr'?0:1];return;} if(btn)btn.textContent=T.timer_pause[currentLang==='fr'?0:1]; studyTimerHandle=setInterval(()=>{studySeconds--;updateStudyTimer();if(studySeconds<=0){clearInterval(studyTimerHandle);studyTimerHandle=null;const p=loadProgress();p.studySessions=(p.studySessions||0)+1;p.studyDays=(p.studyDays||0)+1;saveProgress(p);if(btn)btn.textContent=T.timer_done[currentLang==='fr'?0:1];showToast(T.timer_done[currentLang==='fr'?0:1],'success');}},1000); }
+function safeText(value){return String(value||'').replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));}
+function printTeacherReport(){
+  const p=loadProgress();
+  if(p.lastScore===undefined){showToast(currentLang==='fr'?'Aucun examen enregistré pour le moment.':'لا يوجد امتحان محفوظ بعد.','warning');return;}
+  const student=safeText(document.getElementById('teacherStudent')?.value || (currentLang==='fr'?'—':'—'));
+  const klass=safeText(document.getElementById('teacherClass')?.value || '—');
+  const date=safeText(document.getElementById('teacherDate')?.value || new Date().toLocaleDateString());
+  const report=document.getElementById('teacherReport');
+  if(!report)return;
+  report.innerHTML='<div style="border-top:2px solid var(--blue-deep);padding-top:1rem;margin-top:1rem;"><div class="eyebrow">INSFP BOUSAÂDA · CONTRÔLE DU LAIT</div><h3 style="margin:.25rem 0 .8rem;">'+(currentLang==='fr'?'Relevé d’évaluation':'تقرير التقييم')+'</h3><p><strong>'+(currentLang==='fr'?'Étudiant':'الطالب')+' :</strong> '+student+'<br><strong>'+(currentLang==='fr'?'Classe':'القسم')+' :</strong> '+klass+'<br><strong>'+(currentLang==='fr'?'Date':'التاريخ')+' :</strong> '+date+'</p><div class="metric-grid" style="margin-top:1rem;"><div class="metric"><div class="metric-value">'+Number(p.lastScore).toFixed(1).replace('.0','')+'/20</div><span class="metric-label">'+(currentLang==='fr'?'Score':'النتيجة')+'</span></div><div class="metric"><div class="metric-value">'+(Number(p.lastScore)/20*100).toFixed(1).replace('.0','')+'%</div><span class="metric-label">'+(currentLang==='fr'?'Pourcentage':'النسبة')+'</span></div><div class="metric"><div class="metric-value">'+(p.quizPassed?'✓':'—')+'</div><span class="metric-label">'+(currentLang==='fr'?'Réussi':'ناجح')+'</span></div></div></div>';
+  document.body.classList.add('print-report');
+  window.onafterprint=()=>document.body.classList.remove('print-report');
+  window.print();
+}
+
+/* ============ EXAM MODE ============ */
+function startExam(){
+  document.body.classList.add('exam-mode');
+  if (document.documentElement.requestFullscreen) document.documentElement.requestFullscreen().catch(()=>{});
+  document.getElementById('quizIntro').style.display = 'none';
+  document.getElementById('quizBodyWrap').style.display = 'block';
+  document.getElementById('quizResultsArea').style.display = 'none';
+  document.getElementById('quizQuestionArea').style.display = 'block';
+  currentQ = 0; quizScore = 0; userAnswers = []; examDraft = {}; examResponses = []; answered = false;
+  examSeconds = 0;
+  updateExamTimerDisplay();
+  clearInterval(examTimerHandle);
+  examTimerHandle = setInterval(()=>{ examSeconds++; updateExamTimerDisplay(); }, 1000);
+  renderQuestion();
+  window.scrollTo(0,0);
+}
+
+function updateExamTimerDisplay(){
+  const m = String(Math.floor(examSeconds/60)).padStart(2,'0');
+  const s = String(examSeconds%60).padStart(2,'0');
+  document.getElementById('examTimer').textContent = m+':'+s;
+}
+
+function requestExitExam(){ document.getElementById('exitModal').classList.add('open'); }
+function closeExitModal(){ document.getElementById('exitModal').classList.remove('open'); }
+function confirmExitExam(){
+  closeExitModal();
+  exitExamToIntro();
+}
+function exitExamToIntro(){
+  clearInterval(examTimerHandle);
+  document.body.classList.remove('exam-mode');
+  if (document.fullscreenElement && document.exitFullscreen) document.exitFullscreen().catch(()=>{});
+  document.getElementById('quizIntro').style.display = 'block';
+  document.getElementById('quizBodyWrap').style.display = 'none';
+}
+
+/* ============ QUIZ RENDERING ============ */
+function renderQuestion(){
+  const idx=currentLang==='fr'?0:1, q=QUESTIONS[currentQ], qd=q[currentLang], response=examResponses[currentQ];
+  answered=!!response;
+  document.getElementById('examQLabel').textContent=T.quiz_q_of[idx].replace('{a}',currentQ+1).replace('{b}',QUESTIONS.length)+' · '+q.points+' pts';
+  document.getElementById('examProgressFill').style.width=((currentQ+1)/QUESTIONS.length*100)+'%';
+  const d=examDraft[currentQ]||{};
+  let html='<div class="exam-question-shell"><div class="exam-question-head"><div><div class="official-tag">'+(currentLang==='fr'?'ÉPREUVE OFFICIELLE':'الامتحان الرسمي')+'</div><h3>'+qd.q+'</h3><div class="exam-instruction">'+qd.instruction+'</div></div><div class="exam-points">'+q.points+' / 20</div></div><div class="exam-interaction">';
+  if(q.type==='multi'){
+    const selected=d.selected||[];
+    html+='<div class="exam-choice-grid">'+qd.options.map((opt,i)=>'<button class="exam-choice '+(selected.includes(i)?'selected ':'')+(response?(qd.correct.includes(i)?'correct':selected.includes(i)?'incorrect':''):'')+(response?' locked':'')+'" onclick="toggleExamChoice('+i+')" '+(response?'disabled':'')+'><span class="choice-mark">'+(selected.includes(i)?'✓':'')+'</span><span>'+opt+'</span></button>').join('')+'</div>';
+  } else if(q.type==='build'){
+    const selected=d.selected||[];
+    html+='<div class="dashboard-subtitle">'+(currentLang==='fr'?'Concepts sélectionnés':'المفاهيم المختارة')+' : '+selected.length+'/4</div><div class="build-selected">'+(selected.length?selected.map(id=>'<span class="build-chip">'+qd.options.find(o=>o.id===id).text+'</span>').join(''):'<span class="dashboard-subtitle">'+(currentLang==='fr'?'Choisissez quatre cartes':'اختر أربع بطاقات')+'</span>')+'</div><div class="exam-choice-grid">'+qd.options.map(o=>'<button class="exam-choice '+(selected.includes(o.id)?'selected ':'')+(response?(qd.correct.includes(o.id)?'correct':selected.includes(o.id)?'incorrect':''):'')+(response?' locked':'')+'" onclick="toggleBuildChoice(\''+o.id+'\')" '+(response?'disabled':'')+'><span class="choice-mark">'+(selected.includes(o.id)?'✓':'')+'</span><span>'+o.text+'</span></button>').join('')+'</div>';
+  } else if(q.type==='match'){
+    const map=d.match||{};
+    html+='<div class="match-layout"><div class="match-column">'+qd.left.map((item,i)=>'<button class="match-item '+(d.left===i?'selected ':'')+(Object.prototype.hasOwnProperty.call(map,i)?'matched ':'')+(response?(map[i]===qd.correct[i]?'correct':'incorrect'):'')+'" onclick="chooseMatchLeft('+i+')" '+(response?'disabled':'')+'><span class="match-number">'+(i+1)+'</span>'+item+(Object.prototype.hasOwnProperty.call(map,i)?' · '+(map[i]+1):'')+'</button>').join('')+'</div><div class="match-column">'+qd.right.map((item,i)=>'<button class="match-item '+(Object.values(map).includes(i)?'matched ':'')+'" onclick="chooseMatchRight('+i+')" '+(response?'disabled':'')+'><span class="match-number">'+(i+1)+'</span>'+item+'</button>').join('')+'</div></div><div class="dashboard-subtitle" style="margin-top:.8rem;">'+(currentLang==='fr'?'Associations réalisées : ':'الروابط المنجزة: ')+Object.keys(map).length+'/4</div>';
+  } else {
+    const steps=d.steps||[], eq=d.equation||[];
+    html+='<div class="lab-workbench"><div class="lab-visual"><div class="lab-object"><div class="lab-icon">🥛</div><span>'+(currentLang==='fr'?'Échantillon de lait':'عينة الحليب')+'</span></div><div class="lab-object"><div class="lab-icon">🧪</div><span>NaOH 1/9N</span></div><div class="lab-object"><div class="lab-icon">💧</div><span>'+(currentLang==='fr'?'Phénolphtaléine · rose pâle':'الفينول فثالين · وردي فاتح')+'</span></div></div><div class="dashboard-subtitle">'+(currentLang==='fr'?'Votre ordre':'ترتيبك')+'</div><div class="lab-order">'+(steps.length?steps.map((s,i)=>'<span class="build-chip">'+(i+1)+'. '+qd.steps[s]+'</span>').join(''):'<span class="dashboard-subtitle">'+(currentLang==='fr'?'Cliquez sur les étapes ci-dessous.':'انقر على المراحل أدناه.')+'</span>')+'</div><div class="lab-steps">'+qd.steps.map((step,i)=>'<button class="lab-step" onclick="toggleLabStep('+i+')" '+(response?'disabled':'')+'>'+(steps.includes(i)?'✓ ':'')+step+'</button>').join('')+'</div><div class="dashboard-subtitle" style="margin-top:1rem;">'+(currentLang==='fr'?'Équation chimique — cliquez dans l’ordre':'المعادلة الكيميائية — انقر بالترتيب')+'</div><div class="equation">'+qd.equation.map((token,i)=>'<button class="equation-token '+(eq.includes(i)?'selected':'')+'" onclick="toggleEquationToken('+i+')" '+(response?'disabled':'')+'>'+token+'</button>').join('')+'</div><div class="equation-slots">'+(eq.length?eq.map(i=>qd.equation[i]).join(' '):(currentLang==='fr'?'Aucun élément sélectionné':'لم يتم اختيار أي عنصر'))+'</div><div class="dornic-row"><strong>°D</strong><span class="dashboard-subtitle">'+(currentLang==='fr'?'Choisissez la définition correcte :':'اختر التعريف الصحيح:')+'</span><select class="dornic-select" onchange="setDornic(this.value)" '+(response?'disabled':'')+'><option value="">—</option>'+qd.dornic.map((value,i)=>'<option value="'+i+'" '+(String(d.dornic)===String(i)?'selected':'')+'>'+value+'</option>').join('')+'</select></div></div>';
+  }
+  html+='<div class="exam-action-row">'+(response?'<span class="dashboard-subtitle">'+(currentLang==='fr'?'Réponse verrouillée':'تم قفل الإجابة')+'</span>':'<span class="dashboard-subtitle">'+(currentLang==='fr'?'Vérifiez votre réponse avant validation.':'تحقق من إجابتك قبل التأكيد.')+'</span>')+(response?'':'<button class="btn btn-primary" onclick="submitExamAnswer()">'+T.quiz_validate[idx]+'</button>')+'</div>';
+  if(response){const tone=response.score===q.points?'good':response.score>0?'partial':'bad';html+='<div class="exam-feedback '+tone+'"><strong>'+(response.score===q.points?T.quiz_correct[idx]:response.score>0?T.quiz_partial[idx]:T.quiz_wrong[idx])+'</strong><div class="earned-points">'+Number(response.score).toFixed(1)+' / '+q.points+' '+T.results_points[idx]+'</div><div style="margin-top:.35rem;">'+qd.exp+'</div></div><button class="btn btn-primary" style="margin-top:1rem;" onclick="advanceQuiz()">'+(currentQ===QUESTIONS.length-1?T.quiz_see_results[idx]:T.quiz_next[idx])+'</button>';}
+  html+='</div></div>';document.getElementById('quizQuestionArea').innerHTML=html;
+}
+
+function toggleExamChoice(i){if(answered)return;const d=examDraft[currentQ]||(examDraft[currentQ]={selected:[]});d.selected=d.selected||[];d.selected=d.selected.includes(i)?d.selected.filter(v=>v!==i):d.selected.concat(i);renderQuestion();}
+function toggleBuildChoice(id){if(answered)return;const d=examDraft[currentQ]||(examDraft[currentQ]={selected:[]});d.selected=d.selected||[];d.selected=d.selected.includes(id)?d.selected.filter(v=>v!==id):d.selected.length<4?d.selected.concat(id):d.selected;renderQuestion();}
+function chooseMatchLeft(i){if(answered)return;const d=examDraft[currentQ]||(examDraft[currentQ]={match:{}});d.match=d.match||{};d.left=i;renderQuestion();}
+function chooseMatchRight(i){if(answered)return;const d=examDraft[currentQ]||(examDraft[currentQ]={match:{}});d.match=d.match||{};if(d.left===undefined)return;Object.keys(d.match).forEach(k=>{if(d.match[k]===i)delete d.match[k];});d.match[d.left]=i;delete d.left;renderQuestion();}
+function toggleLabStep(i){if(answered)return;const d=examDraft[currentQ]||(examDraft[currentQ]={steps:[]});d.steps=d.steps||[];d.steps=d.steps.includes(i)?d.steps.filter(v=>v!==i):d.steps.concat(i);renderQuestion();}
+function toggleEquationToken(i){if(answered)return;const d=examDraft[currentQ]||(examDraft[currentQ]={equation:[]});d.equation=d.equation||[];d.equation=d.equation.includes(i)?d.equation.filter(v=>v!==i):d.equation.concat(i);renderQuestion();}
+function setDornic(value){if(answered)return;const d=examDraft[currentQ]||(examDraft[currentQ]={});d.dornic=value===''?null:Number(value);}
+function submitExamAnswer(){
+  if(answered)return;
+  const q=QUESTIONS[currentQ],d=examDraft[currentQ]||{},qd=q[currentLang],response={};
+  if(q.type==='multi'){const selected=d.selected||[],correct=selected.filter(i=>qd.correct.includes(i)).length,wrong=selected.filter(i=>!qd.correct.includes(i)).length;response.score=Math.max(0,(correct-wrong)/qd.correct.length*q.points);response.answer=selected.map(i=>qd.options[i]);response.correct=correct===qd.correct.length&&wrong===0;}
+  else if(q.type==='build'){const selected=d.selected||[],correct=selected.filter(id=>qd.correct.includes(id)).length,wrong=selected.filter(id=>!qd.correct.includes(id)).length;response.score=Math.max(0,(correct-wrong)/qd.correct.length*q.points);response.answer=selected.map(id=>qd.options.find(o=>o.id===id).text);response.correct=correct===qd.correct.length&&wrong===0;}
+  else if(q.type==='match'){const map=d.match||{},matches=qd.correct.filter((right,left)=>Number(map[left])===right).length;response.score=matches*1.5;response.answer=Object.keys(map).map(k=>qd.left[k]+' → '+qd.right[map[k]]);response.correct=matches===4;}
+  else {const steps=d.steps||[],eq=d.equation||[],stepCorrect=steps.filter((value,i)=>value===i).length,eqCorrect=eq.length===qd.equation.length&&eq.every((value,i)=>value===i),dornic=Number(d.dornic)===qd.correctDornic;response.score=stepCorrect/qd.steps.length*3+(eqCorrect?1.5:0)+(dornic?1:0);response.answer=steps.map(i=>qd.steps[i]);response.correct=stepCorrect===qd.steps.length&&eqCorrect&&dornic;}
+  response.score=Math.round(response.score*10)/10;examResponses[currentQ]=response;quizScore=examResponses.reduce((sum,r)=>sum+(r?r.score:0),0);renderQuestion();
+}
+
+function advanceQuiz(){
+  if (currentQ < QUESTIONS.length-1){
+    currentQ++;
+    renderQuestion();
+  } else {
+    finishExam();
+  }
+}
+
+function finishExam(){
+  clearInterval(examTimerHandle);
+  document.getElementById('quizQuestionArea').style.display = 'none';
+  document.getElementById('quizResultsArea').style.display = 'block';
+
+  const p = loadProgress();
+  quizScore = Math.round(quizScore * 10) / 10;
+  p.lastScore = quizScore;
+  p.attempts = (p.attempts || 0) + 1;
+  if (quizScore >= 10) p.quizPassed = true;
+  if (p.bestScore === undefined || quizScore > p.bestScore) p.bestScore = quizScore;
+  p.lastExamSeconds = examSeconds;
+  p.lastActivity = new Date().toISOString();
+  p.wrongAnswers = QUESTIONS.map((q,i)=>({id:q.id,wrong:!examResponses[i].correct})).filter(x=>x.wrong).map(x=>x.id);
+  p.topicStats = p.topicStats || {};
+  QUESTIONS.forEach((q,i)=>{
+    const r = examResponses[i];
+    p.topicStats[q.topic] = {earned:r.score,total:q.points,rate:r.score/q.points*100};
+  });
+  p.badges = p.badges || [];
+  if (!p.badges.includes('first')) p.badges.push('first');
+  if (quizScore >= 10 && !p.badges.includes('pass')) p.badges.push('pass');
+  if (quizScore >= 15 && !p.badges.includes('high')) p.badges.push('high');
+  if (quizScore === 20 && !p.badges.includes('perfect')) p.badges.push('perfect');
+  if (['s1','s2','s3'].every(id=>p[id]) && !p.badges.includes('lessons')) p.badges.push('lessons');
+  saveProgress(p);
+  refreshProgressUI();
+
+  renderResults();
+}
+
+function renderResults(){
+  const idx = currentLang==='fr' ? 0 : 1;
+  const m = String(Math.floor(examSeconds/60)).padStart(2,'0');
+  const s = String(examSeconds%60).padStart(2,'0');
+  let tier = 'low', msgKey='results_low';
+  if (quizScore === 20){ tier='pass'; msgKey='results_perfect'; }
+  else if (quizScore >= 15){ tier='pass'; msgKey='results_pass'; }
+  else if (quizScore >= 10){ tier='mid'; msgKey='results_mid'; }
+
+  const icons = {
+    pass: '<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8M12 17v4M7 4h10v4a5 5 0 0 1-10 0V4z"/><path d="M7 5H4a1 1 0 0 0-1 1c0 2.5 1.5 4.5 4 5M17 5h3a1 1 0 0 1 1 1c0 2.5-1.5 4.5-4 5"/></svg>',
+    mid: '<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>',
+    low: '<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>'
+  };
+
+  const p=loadProgress(),stats=Object.entries(p.topicStats||{}),strongest=stats.slice().sort((a,b)=>b[1].rate-a[1].rate)[0],weakest=stats.slice().sort((a,b)=>a[1].rate-b[1].rate)[0],mistakes=examResponses.filter(r=>!r.correct).length;
+  let html='<div class="results-wrap"><div class="results-dashboard"><div class="result-hero"><h2>'+T.results_final[idx]+'</h2><div class="result-score">'+quizScore.toFixed(1).replace('.0','')+' / 20</div><div class="result-percent">'+(quizScore/20*100).toFixed(1).replace('.0','')+'%</div><div class="result-pass">'+(quizScore>=10?T.results_passed[idx]:T.results_failed[idx])+'</div><div class="results-time" style="color:rgba(255,255,255,.72);margin-top:1rem;">'+T.results_time_label[idx].replace('{t}',m+':'+s)+'</div></div><div class="result-facts"><div class="result-fact"><span>'+T.results_strongest[idx]+'</span><strong>'+(strongest?strongest[0]:'—')+'</strong></div><div class="result-fact"><span>'+T.results_weakest[idx]+'</span><strong>'+(weakest?weakest[0]:'—')+'</strong></div><div class="result-fact"><span>'+T.results_mistakes[idx]+'</span><strong>'+mistakes+' / 4</strong></div><div class="result-fact"><span>'+T.results_points[idx]+'</span><strong>'+quizScore.toFixed(1).replace('.0','')+' / 20</strong></div></div></div><div class="results-msg" style="margin:1.2rem 0;">'+T[msgKey][idx]+'</div><div class="results-actions">';
+  html+='<button class="btn btn-outline" onclick="startExam()">'+T.results_retry[idx]+'</button><button class="btn btn-outline" onclick="showOnlyErrors()">'+T.results_review_errors[idx]+'</button><button class="btn btn-primary" onclick="exitExamToIntro()">'+T.results_back[idx]+'</button></div><div class="review-list"><div class="section-title">'+T.results_review_title[idx]+'</div>';
+  QUESTIONS.forEach((q,i)=>{
+    const qd = q[currentLang];
+    const ua = examResponses[i] || {correct:false,score:0,answer:[]};
+    const okIcon = '<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>';
+    const badIcon = '<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg>';
+    html += '<div class="review-item" data-review="'+(ua.correct?'correct':'wrong')+'"><div class="review-item-q '+(ua.correct?'correct':'wrong')+'">'+(ua.correct?okIcon:badIcon)+'<span>'+(i+1)+'. '+qd.q+' <small>('+q.points+' pts)</small></span></div>';
+    html += '<div class="review-answer '+(ua.correct?'correct-ans':'your-wrong')+'">'+(currentLang==='fr'?'Votre réponse':'إجابتك')+' : '+(ua.answer&&ua.answer.length?ua.answer.join(' · '):(currentLang==='fr'?'Aucune réponse':'لا توجد إجابة'))+'</div>';
+    html += '<div class="review-answer correct-ans">'+(currentLang==='fr'?'Correction':'التصحيح')+' : '+(q.type==='multi'?qd.options.filter((_,n)=>qd.correct.includes(n)).join(' · '):q.type==='build'?qd.options.filter(o=>qd.correct.includes(o.id)).map(o=>o.text).join(' · '):q.type==='match'?qd.left.map((left,n)=>left+' → '+qd.right[qd.correct[n]]).join(' | '):qd.steps.join(' → ')+' | '+qd.equation.join(' ')+' | '+qd.dornic[qd.correctDornic])+'</div>';
+    html += '<div class="review-exp">'+qd.exp+' <strong>('+Number(ua.score).toFixed(1)+' / '+q.points+')</strong></div></div>';
+  });
+  html += '</div></div>';
+
+  document.getElementById('quizResultsArea').innerHTML = html;
+}
+function showOnlyErrors(){
+  document.querySelectorAll('[data-review]').forEach(el=>el.style.display=el.dataset.review==='wrong'?'block':'none');
+}
+
+/* ============ KEYBOARD SUPPORT ============ */
+document.addEventListener('keydown', (e)=>{
+  if (!document.body.classList.contains('exam-mode')) return;
+  if (document.getElementById('exitModal').classList.contains('open')){
+    if (e.key === 'Escape') closeExitModal();
+    return;
+  }
+  if (e.key === 'Escape'){ requestExitExam(); return; }
+  if (document.getElementById('quizResultsArea').style.display !== 'none') return;
+  if (!answered && ['1','2','3','4'].includes(e.key)){
+    const i = parseInt(e.key,10)-1;
+    if (QUESTIONS[currentQ].type === 'multi') toggleExamChoice(i);
+    else if (QUESTIONS[currentQ].type === 'build'){
+      const opts = QUESTIONS[currentQ][currentLang].options;
+      if (opts[i]) toggleBuildChoice(opts[i].id);
+    }
+  } else if (!answered && e.key === 'Enter'){
+    submitExamAnswer();
+  } else if (answered && e.key === 'Enter'){
+    advanceQuiz();
+  }
+});
+
+/* ============ INIT ============ */
+window.addEventListener('DOMContentLoaded', ()=>{
+  refreshProgressUI();
+  const savedLang = storageGet('milkControlLang');
+  applyLanguage(savedLang === 'ar' ? 'ar' : 'fr');
+  renderCaseStudy();
+  const lastSection = storageGet('milkControlLastSection');
+  if (lastSection && document.getElementById(lastSection) && lastSection !== 'quiz') showSection(lastSection, document.querySelector('.nav-tab[data-section="'+lastSection+'"]'));
+
+  const savedTheme = storageGet('milkControlTheme');
+  let initialTheme = savedTheme;
+  if (!initialTheme){
+    try { initialTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'; }
+    catch(e){ initialTheme = 'light'; }
+  }
+  applyTheme(initialTheme);
+  updateStudyTimer();
+  document.querySelector('.flashcard-scene')?.addEventListener('keydown', e=>{ if(e.key==='Enter'||e.key===' ') { e.preventDefault(); flipFlashcard(); } });
+  if ('serviceWorker' in navigator && location.protocol !== 'file:') navigator.serviceWorker.register('service-worker.js').catch(()=>{});
+});
+</script>
+</body>
+</html>
